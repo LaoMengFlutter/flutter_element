@@ -1,9 +1,7 @@
-name: ele_progress
-description: element progress.
+name: ele_border
+description: A new Flutter project.
 version: 0.0.1
-homepage: http://laomengit.com/
-repository: https://github.com/LaoMengFlutter/flutter_element
-
+homepage:
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -12,7 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  ele_theme: ^0.0.1
+
+  ele_theme:
+    path: ../theme
 
 dev_dependencies:
   flutter_test:
