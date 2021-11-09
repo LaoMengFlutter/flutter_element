@@ -6,8 +6,6 @@ import 'package:sample/ui/widgets/button_demo.dart';
 import 'package:sample/ui/widgets/image_demo.dart';
 import 'package:sample/ui/widgets/prgress_demo.dart';
 import 'package:sample/ui/widgets/widget_list.dart';
-import 'package:octo_image/octo_image.dart';
-import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 
 void main() {
   runApp(const MyApp());

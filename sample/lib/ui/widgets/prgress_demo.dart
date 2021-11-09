@@ -1,4 +1,4 @@
-import 'package:ele_button/ele_button.dart';
+// import 'package:ele_button/ele_button.dart';
 import 'package:ele_progress/ele_progress.dart';
 import 'package:ele_theme/ele_theme_data.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,7 @@ class _ProgressDemoState extends State<ProgressDemo>
         child: SingleChildScrollView(
           child: Column(
             children: [
-              EButton(
+              TextButton(
                 onPressed: () {
                   _controller.reset();
                   _controller.forward();

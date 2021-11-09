@@ -34,19 +34,11 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  ele_border:
-    path: ../lib/border
-  ele_theme:
-    path: ../lib/theme
-  ele_button:
-    path: ../lib/button
-  ele_progress:
-    path: ../lib/ele_progress
-  ele_image:
-    path: ../lib/ele_image
 
-  octo_image: ^1.0.0+1
-  circular_profile_avatar: ^2.0.5
+#  ele_theme: ^0.0.1
+
+  ele_progress: ^0.0.1
+
 
 dev_dependencies:
   flutter_test:
