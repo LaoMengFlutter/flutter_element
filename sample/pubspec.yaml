@@ -1,5 +1,5 @@
 name: sample
-description: A new Flutter project.
+description: A new Flutter application.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -35,10 +35,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
-#  ele_theme: ^0.0.1
-
-  ele_progress: ^0.0.1
-
+  flutter_element:
+    path: ../lib
 
 dev_dependencies:
   flutter_test:
