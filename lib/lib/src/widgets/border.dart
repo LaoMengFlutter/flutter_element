@@ -1,4 +1,3 @@
-
 import 'dart:math';
 import 'dart:ui';
 
@@ -13,7 +12,7 @@ class EBorder extends StatelessWidget {
   final Widget? child;
 
   /// border style
-  final EleBorderThemeData? style;
+  final EBorderStyle? style;
 
   ///形状
   final BorderShape shape;
@@ -23,10 +22,13 @@ class EBorder extends StatelessWidget {
   /// default center
   final Alignment alignment;
 
+  /// mainAxisSize
+  final MainAxisSize mainAxisSize;
+
   /// 方向
   ///
-  /// shape == line 时，表示方向
-  final BorderLineDirection direction;
+  /// shape == line 时，表示方向 line 使用 Divide
+  // BorderLineDirection direction = BorderLineDirection.horizontal;
 
   const EBorder({
     Key? key,
@@ -35,25 +37,22 @@ class EBorder extends StatelessWidget {
     this.alignment = Alignment.center,
     this.type = BorderType.solid,
     this.shape = BorderShape.rrect,
-    this.direction = BorderLineDirection.horizontal,
+    this.mainAxisSize = MainAxisSize.max,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final EleThemeData eleThemeData = EleTheme.of(context);
-    final Color color = style?.color ??
-        eleThemeData.primaryColor ??
-        Theme.of(context).primaryColor;
-    final double strokeWidth =
-        style?.strokeWidth ?? eleThemeData.borderThemeData?.strokeWidth ?? 1.0;
-    final Radius radius = style?.radius ??
-        eleThemeData.borderThemeData?.radius ??
-        const Radius.circular(3.0);
+    const BorderLineDirection direction = BorderLineDirection.horizontal;
+    final EleThemeData eleTheme = EleTheme.of(context);
+    var _style = eleTheme.borderStyle?.merge(style) ?? style;
 
-    final double dashWidth =
-        style?.dashWidth ?? eleThemeData.borderThemeData?.dashWidth ?? 3.0;
-    final double dashGap =
-        style?.dashGap ?? eleThemeData.borderThemeData?.dashGap ?? 3.0;
+    final Color color = _style?.color ?? Theme.of(context).primaryColor;
+
+    final double strokeWidth = _style?.strokeWidth ?? 1.0;
+    final BorderRadius radius = _style?.radius ?? BorderRadius.circular(3.0);
+
+    final double dashWidth = _style?.dashWidth ?? 3.0;
+    final double dashGap = _style?.dashGap ?? 3.0;
 
     var painter = type == BorderType.solid
         ? _SolidPainter(
@@ -72,9 +71,23 @@ class EBorder extends StatelessWidget {
             shape: shape,
             direction: direction,
           );
+
+    if (mainAxisSize == MainAxisSize.max) {
+      return CustomPaint(
+        painter: painter,
+        child: Container(
+          padding: _style?.padding,
+          alignment: alignment,
+          child: child,
+        ),
+      );
+    }
     return CustomPaint(
       painter: painter,
-      child: Align(alignment: alignment, child: child),
+      child: Container(
+        padding: _style?.padding,
+        child: child,
+      ),
     );
   }
 }
@@ -87,7 +100,7 @@ abstract class _BasePainter extends CustomPainter {
   final double strokeWidth;
 
   /// 圆角
-  final Radius radius;
+  final BorderRadius radius;
 
   ///形状
   final BorderShape shape;
@@ -116,15 +129,15 @@ abstract class _BasePainter extends CustomPainter {
   Path getPath(Size size) {
     Path _path = Path();
     switch (shape) {
-      case BorderShape.line:
-        if (direction == BorderLineDirection.horizontal) {
-          _path.moveTo(0, size.height / 2);
-          _path.lineTo(size.width, size.height / 2);
-        } else {
-          _path.moveTo(size.width / 2, 0);
-          _path.lineTo(size.width / 2, size.height);
-        }
-        break;
+      // case BorderShape.line:
+      //   if (direction == BorderLineDirection.horizontal) {
+      //     _path.moveTo(0, size.height / 2);
+      //     _path.lineTo(size.width, size.height / 2);
+      //   } else {
+      //     _path.moveTo(size.width / 2, 0);
+      //     _path.lineTo(size.width / 2, size.height);
+      //   }
+      //   break;
       case BorderShape.rect:
         _path.addRect(Rect.fromLTWH(0, 0, size.width, size.height));
         break;
@@ -134,8 +147,13 @@ abstract class _BasePainter extends CustomPainter {
             radius: min(size.width, size.height) / 2));
         break;
       case BorderShape.rrect:
-        _path.addRRect(RRect.fromRectAndRadius(
-            Rect.fromLTWH(0, 0, size.width, size.height), radius));
+        _path.addRRect(RRect.fromRectAndCorners(
+          Rect.fromLTWH(0, 0, size.width, size.height),
+          topLeft: radius.topLeft,
+          topRight: radius.topRight,
+          bottomLeft: radius.bottomLeft,
+          bottomRight: radius.bottomRight,
+        ));
         break;
       case BorderShape.round:
         _path.addRRect(RRect.fromRectAndRadius(
@@ -159,7 +177,7 @@ class _DashedPainter extends _BasePainter {
     required double strokeWidth,
     required this.dashGap,
     required this.dashWidth,
-    required Radius radius,
+    required BorderRadius radius,
     required BorderShape shape,
     required BorderLineDirection direction,
   }) : super(
@@ -219,7 +237,7 @@ class _SolidPainter extends _BasePainter {
   _SolidPainter({
     required Color color,
     required double strokeWidth,
-    required Radius radius,
+    required BorderRadius radius,
     required BorderShape shape,
     required BorderLineDirection direction,
   }) : super(
@@ -257,9 +275,6 @@ enum BorderType {
 
 /// 线框形状
 enum BorderShape {
-  /// 直线
-  line,
-
   /// 虚线
   circle,
 

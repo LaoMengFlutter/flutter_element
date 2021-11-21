@@ -6,15 +6,17 @@ class ECheckbox extends StatefulWidget {
   final bool? value;
   final bool tristate;
   final String? label;
+  final bool border;
   final ECheckboxStyle? style;
   final ValueChanged<bool?>? onChanged;
 
   const ECheckbox({
     Key? key,
     this.value,
-    this.tristate = false,
     this.label,
     this.onChanged,
+    this.tristate = false,
+    this.border = false,
     this.style,
   }) : super(key: key);
 
@@ -43,13 +45,16 @@ class _ECheckboxState extends State<ECheckbox> {
     EleThemeData eleTheme = EleTheme.of(context);
     var style = eleTheme.checkboxStyle?.merge(widget.style) ?? widget.style;
 
-    return Row(
+    var child = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Checkbox(
           value: _value,
           tristate: widget.tristate,
           onChanged: _onChanged,
+          visualDensity: const VisualDensity(
+              horizontal: VisualDensity.minimumDensity,
+              vertical: VisualDensity.minimumDensity),
         ),
         SizedBox(width: style?.space),
         if (widget.label != null)
@@ -62,6 +67,30 @@ class _ECheckboxState extends State<ECheckbox> {
             ),
           ),
       ],
+    );
+    if (widget.border) {
+      return Container(
+        color: (_value ?? false)
+            ? style?.checkedBackgroundColor
+            : style?.backgroundColor,
+        child: EBorder(
+          mainAxisSize: MainAxisSize.min,
+          style: EBorderStyle(
+            color: (_value ?? false)
+                ? style?.checkedBorderColor
+                : style?.borderColor,
+            radius: style?.borderRadius,
+          ),
+          child: child,
+        ),
+      );
+    }
+    return Container(
+      padding: style?.padding,
+      color: (_value ?? false)
+          ? style?.checkedBackgroundColor
+          : style?.backgroundColor,
+      child: child,
     );
   }
 }

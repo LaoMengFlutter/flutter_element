@@ -13,7 +13,7 @@ class BorderDemo extends StatelessWidget {
         children: [
           SizedBox(
             height: 12,
-            width: double.infinity,
+            width: double.infinity
           ),
           Container(
             height: 40,
@@ -22,20 +22,33 @@ class BorderDemo extends StatelessWidget {
               child: Text('data'),
             ),
           ),
-          SizedBox(
-            height: 12,
+          SizedBox(height: 12),
+          const EBorder(
+            child: Text('data'),
           ),
+          SizedBox(height: 12),
+          const EBorder(
+            mainAxisSize: MainAxisSize.min,
+            child: Text('data'),
+          ),
+          SizedBox(height: 12),
+          const EBorder(
+            mainAxisSize: MainAxisSize.min,
+            style: EBorderStyle(
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30)),
+            child: Text('data'),
+          ),
+          SizedBox(height: 12),
           Container(
             height: 40,
             width: 100,
-            child: const EBorder(
+            child: EBorder(
               type: BorderType.dashed,
               shape: BorderShape.round,
-              style: EleBorderThemeData(
-                color: Colors.yellow,
-                strokeWidth: 2,
-                radius: Radius.circular(8),
-              ),
+              style: EBorderStyle(
+                  color: Colors.yellow,
+                  strokeWidth: 2,
+                  radius: BorderRadius.circular(5.0)),
               child: Text('data'),
             ),
           ),
@@ -67,7 +80,7 @@ class BorderDemo extends StatelessWidget {
             child: const EBorder(
               type: BorderType.dashed,
               shape: BorderShape.rrect,
-              style: EleBorderThemeData(),
+              style: EBorderStyle(),
               child: Text('data3'),
             ),
           ),
@@ -78,7 +91,7 @@ class BorderDemo extends StatelessWidget {
             child: const EBorder(
               type: BorderType.dashed,
               shape: BorderShape.rrect,
-              style: EleBorderThemeData(color: Colors.red),
+              style: EBorderStyle(color: Colors.red),
               child: Text('data'),
             ),
           ),
@@ -89,7 +102,7 @@ class BorderDemo extends StatelessWidget {
             child: const EBorder(
               type: BorderType.dashed,
               shape: BorderShape.rrect,
-              style: EleBorderThemeData(
+              style: EBorderStyle(
                 color: Colors.red,
                 strokeWidth: 3,
               ),
@@ -103,7 +116,7 @@ class BorderDemo extends StatelessWidget {
             child: const EBorder(
               type: BorderType.dashed,
               shape: BorderShape.rrect,
-              style: EleBorderThemeData(
+              style: EBorderStyle(
                 color: Colors.red,
                 strokeWidth: 3,
                 dashGap: 5,
@@ -119,7 +132,7 @@ class BorderDemo extends StatelessWidget {
             child: const EBorder(
               type: BorderType.dashed,
               shape: BorderShape.rrect,
-              style: EleBorderThemeData(
+              style: EBorderStyle(
                 color: Colors.red,
                 strokeWidth: 1,
                 dashGap: 5,
@@ -132,53 +145,12 @@ class BorderDemo extends StatelessWidget {
           Container(
             height: 40,
             width: 200,
-            child: const EBorder(
+            child: EBorder(
               type: BorderType.dashed,
               shape: BorderShape.rrect,
-              style: EleBorderThemeData(
-                  color: Colors.red, radius: Radius.circular(5)),
+              style: EBorderStyle(
+                  color: Colors.red, radius: BorderRadius.circular(5)),
               child: Text('data'),
-            ),
-          ),
-          SizedBox(height: 12),
-          Container(
-            height: 40,
-            width: 200,
-            child: const EBorder(
-              type: BorderType.dashed,
-              shape: BorderShape.line,
-              style: EleBorderThemeData(
-                  color: Colors.red, radius: Radius.circular(5)),
-            ),
-          ),
-          SizedBox(height: 12),
-          Container(
-            height: 40,
-            width: 200,
-            child: const EBorder(
-              shape: BorderShape.line,
-            ),
-          ),
-          Container(
-            height: 50,
-            width: 50,
-            child: const EBorder(
-              shape: BorderShape.line,
-              direction: BorderLineDirection.vertical,
-            ),
-          ),
-          SizedBox(height: 12),
-          Container(
-            height: 40,
-            width: 200,
-            child: EBorder(
-              shape: BorderShape.line,
-              type: BorderType.dashed,
-              child: Container(
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text('data'),
-              ),
             ),
           ),
         ],

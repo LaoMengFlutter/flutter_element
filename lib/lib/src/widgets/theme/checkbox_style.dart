@@ -10,8 +10,8 @@ class ECheckboxStyle with Diagnosticable {
   final Color? checkedBackgroundColor;
   final Color? borderColor;
   final Color? checkedBorderColor;
-  final BorderRadius? borderRadius;
   final EdgeInsets? padding;
+  final BorderRadius? borderRadius;
 
   /// The distance between the checkbox and the label
   final double? space;

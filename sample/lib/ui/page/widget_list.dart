@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sample/ui/page/input_number_demo.dart';
+import 'package:sample/ui/page/text_field_demo.dart';
 import 'button_demo.dart';
 import 'checkbox_demo.dart';
+import 'dropdown_demo.dart';
 import 'image_demo.dart';
 import 'prgress_demo.dart';
 import 'radio_demo.dart';
@@ -17,6 +20,9 @@ class WidgetList extends StatelessWidget {
     {'title': 'Progress', 'page': const ProgressDemo()},
     {'title': 'Radio', 'page': const RadioDemo()},
     {'title': 'Checkbox', 'page': const CheckboxDemo()},
+    {'title': 'TextField', 'page': const TextFieldDemo()},
+    {'title': 'Dropdown', 'page': const DropdownDemo()},
+    {'title': 'InputNumber', 'page': const InputNumberDemo()},
   ];
 
   @override

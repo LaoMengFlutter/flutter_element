@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_element/src/widgets/theme/text_field_style.dart';
 import 'package:flutter_element/widgets.dart';
 
 class EleThemeData with Diagnosticable {
@@ -21,11 +22,12 @@ class EleThemeData with Diagnosticable {
     required this.backgroundColorWhite,
     required this.backgroundColorBlack,
     required this.borderRadiusBase,
-    required this.borderThemeData,
+    required this.borderStyle,
     required this.buttonThemeData,
     required this.imageThemeData,
     required this.radioStyle,
     required this.checkboxStyle,
+    required this.textFieldStyle,
   })  : assert(primaryColor != null),
         assert(successColor != null),
         assert(warningColor != null),
@@ -43,11 +45,12 @@ class EleThemeData with Diagnosticable {
         assert(backgroundColorWhite != null),
         assert(backgroundColorBlack != null),
         assert(borderRadiusBase != null),
-        assert(borderThemeData != null),
+        assert(borderStyle != null),
         assert(buttonThemeData != null),
         assert(imageThemeData != null),
         assert(radioStyle != null),
-        assert(checkboxStyle != null);
+        assert(checkboxStyle != null),
+        assert(textFieldStyle != null);
 
   factory EleThemeData({
     Color? primaryColor,
@@ -67,11 +70,12 @@ class EleThemeData with Diagnosticable {
     Color? backgroundColorWhite,
     Color? backgroundColorBlack,
     double? borderRadiusBase,
-    EleBorderThemeData? borderThemeData,
+    EBorderStyle? borderStyle,
     EleButtonThemeData? buttonThemeData,
     EleImageThemeData? imageThemeData,
     ERadioStyle? radioStyle,
     ECheckboxStyle? checkboxStyle,
+    ETextFieldStyle? textFieldStyle,
   }) {
     primaryColor ??= const Color(0xFF409EFF);
     successColor ??= const Color(0xFF67C23A);
@@ -95,7 +99,18 @@ class EleThemeData with Diagnosticable {
 
     borderRadiusBase ??= 4.0;
 
-    borderThemeData ??= const EleBorderThemeData();
+    final EBorderStyle _defaultBorderStyle = EBorderStyle(
+      color: borderColorBase,
+      strokeWidth: 1,
+      dashGap: 3,
+      dashWidth: 3,
+      radius: BorderRadius.all(Radius.circular(borderRadiusBase)),
+      padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12),
+    );
+    final EBorderStyle _defaultCheckedBorderStyle =
+        _defaultBorderStyle.merge(EBorderStyle(color: primaryColor));
+
+    borderStyle = _defaultCheckedBorderStyle.merge(borderStyle);
     buttonThemeData ??= const EleButtonThemeData();
 
     EleImageThemeData _defaultImageTheme =
@@ -119,14 +134,25 @@ class EleThemeData with Diagnosticable {
     ECheckboxStyle _defaultCheckboxStyle = ECheckboxStyle(
         fontColor: regularTextColor,
         backgroundColor: backgroundColorWhite,
-        borderColor: borderColorBase,
         checkedFontColor: primaryColor,
-        checkedBorderColor: primaryColor,
         checkedBackgroundColor: backgroundColorWhite,
+        borderColor: borderColorBase,
+        checkedBorderColor: primaryColor,
         borderRadius: BorderRadius.all(Radius.circular(borderRadiusBase)),
         padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12),
         space: 3.0);
     checkboxStyle = _defaultCheckboxStyle.merge(checkboxStyle);
+
+    ETextFieldStyle _defaultTextFieldStyle = ETextFieldStyle(
+      fontColor: regularTextColor,
+      backgroundColor: backgroundColorWhite,
+      placeholderColor: placeholderColor,
+      borderColor: borderColorBase,
+      focusBorderColor: primaryColor,
+      borderRadius: BorderRadius.all(Radius.circular(borderRadiusBase)),
+      clearColor: borderColorBase,
+    );
+    textFieldStyle = _defaultTextFieldStyle.merge(textFieldStyle);
 
     return EleThemeData.raw(
       primaryColor: primaryColor,
@@ -146,11 +172,12 @@ class EleThemeData with Diagnosticable {
       backgroundColorWhite: backgroundColorWhite,
       backgroundColorBlack: backgroundColorBlack,
       borderRadiusBase: borderRadiusBase,
-      borderThemeData: borderThemeData,
+      borderStyle: borderStyle,
       buttonThemeData: buttonThemeData,
       imageThemeData: imageThemeData,
       radioStyle: radioStyle,
       checkboxStyle: checkboxStyle,
+      textFieldStyle: textFieldStyle,
     );
   }
 
@@ -198,7 +225,7 @@ class EleThemeData with Diagnosticable {
   final double? borderRadiusBase;
 
   /// border theme data
-  final EleBorderThemeData? borderThemeData;
+  final EBorderStyle? borderStyle;
 
   /// button theme data
   final EleButtonThemeData? buttonThemeData;
@@ -208,6 +235,7 @@ class EleThemeData with Diagnosticable {
 
   final ERadioStyle? radioStyle;
   final ECheckboxStyle? checkboxStyle;
+  final ETextFieldStyle? textFieldStyle;
 
   factory EleThemeData.light() => EleThemeData();
 }
