@@ -1,7 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_element/src/widgets/theme/text_field_style.dart';
-import 'package:flutter_element/widgets.dart';
+
+import 'border_style.dart';
+import 'button_theme_data.dart';
+import 'checkbox_style.dart';
+import 'image_crop_style.dart';
+import 'image_theme_data.dart';
+import 'input_number_style.dart';
+import 'radio_style.dart';
+import 'rate_style.dart';
+import 'slider_style.dart';
+import 'switch_style.dart';
+import 'text_field_style.dart';
+import 'wheel_switch_style.dart';
+
 
 class EleThemeData with Diagnosticable {
   const EleThemeData.raw({

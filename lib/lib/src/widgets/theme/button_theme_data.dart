@@ -1,7 +1,8 @@
 
-import 'package:flutter_element/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import 'theme_status.dart';
 
 class EleButtonThemeData with Diagnosticable {
   /// textStyle

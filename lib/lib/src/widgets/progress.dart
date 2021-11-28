@@ -3,7 +3,9 @@ library ele_progress;
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_element/widgets.dart';
+import 'theme/theme.dart';
+import 'theme/theme_data.dart';
+import 'theme/theme_status.dart';
 
 enum ProgressType { line, circle, dashboard, liquid }
 

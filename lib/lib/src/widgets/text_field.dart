@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_element/src/widgets/theme/text_field_style.dart';
-import 'package:flutter_element/widgets.dart';
+
+import 'theme/text_field_style.dart';
+import 'theme/theme.dart';
+import 'theme/theme_data.dart';
 
 typedef WidgetLimitBuilder = Widget Function(
     BuildContext context, int length, int maxLength);

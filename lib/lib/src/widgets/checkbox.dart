@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_element/src/widgets/theme/checkbox_style.dart';
-import 'package:flutter_element/widgets.dart';
+import 'border.dart';
+import 'theme/border_style.dart';
+import 'theme/checkbox_style.dart';
+import 'theme/theme.dart';
+import 'theme/theme_data.dart';
 
 class ECheckbox extends StatefulWidget {
   final bool? value;

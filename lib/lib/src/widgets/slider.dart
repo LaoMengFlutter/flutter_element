@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_element/widgets.dart';
+import 'theme/slider_style.dart';
+import 'theme/theme.dart';
+import 'theme/theme_data.dart';
 
 class ESlider extends StatefulWidget {
   final double value;

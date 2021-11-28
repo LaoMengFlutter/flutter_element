@@ -1,4 +1,4 @@
-library flutter_element;
+library element_ui;
 
 export 'src/widgets/theme/theme.dart';
 export 'src/widgets/theme/theme_data.dart';

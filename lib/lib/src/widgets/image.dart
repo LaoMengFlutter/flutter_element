@@ -2,7 +2,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_element/widgets.dart';
+import 'theme/theme.dart';
+import 'theme/theme_data.dart';
 
 class EImage extends StatelessWidget {
   const EImage({

@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_element/widgets.dart';
+import 'package:element_ui/widgets.dart';
 
 ///
 /// 开关默认width

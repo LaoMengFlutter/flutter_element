@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_element/src/widgets/theme/switch_style.dart';
-import 'package:flutter_element/widgets.dart';
+import 'theme/switch_style.dart';
+import 'theme/theme.dart';
+import 'theme/theme_data.dart';
 
 class ESwitch extends StatefulWidget {
   final bool value;

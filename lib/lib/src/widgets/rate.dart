@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_element/src/widgets/theme/rate_style.dart';
-import 'package:flutter_element/widgets.dart';
+import 'theme/rate_style.dart';
+import 'theme/theme.dart';
+import 'theme/theme_data.dart';
 
 typedef LabelWidgetBuilder = Widget Function(double value);
 

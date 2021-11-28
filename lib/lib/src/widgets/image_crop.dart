@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_element/widgets.dart';
+import 'theme/image_crop_style.dart';
+import 'theme/theme.dart';
+import 'theme/theme_data.dart';
 
 class EImageCrop extends StatefulWidget {
   final ImageProvider image;
