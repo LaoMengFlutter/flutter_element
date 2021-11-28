@@ -39,6 +39,12 @@ class CheckboxDemo extends StatelessWidget {
             style: ECheckboxStyle(
                 borderColor: Colors.green, checkedBorderColor: Colors.red),
           ),
+          SizedBox(height: 12),
+          ECheckbox(
+            value: false,
+            label: '禁用',
+            enable: false,
+          ),
         ],
       ),
     );

@@ -4,11 +4,17 @@ import 'package:sample/ui/page/text_field_demo.dart';
 import 'button_demo.dart';
 import 'checkbox_demo.dart';
 import 'dropdown_demo.dart';
+import 'image_crop_demo.dart';
 import 'image_demo.dart';
+import 'image_preview_demo.dart';
 import 'prgress_demo.dart';
 import 'radio_demo.dart';
 
 import 'border_demo.dart';
+import 'rate_demo.dart';
+import 'slider_demo.dart';
+import 'switch_demo.dart';
+import 'wheel_switch_demo.dart';
 
 class WidgetList extends StatelessWidget {
   WidgetList({Key? key}) : super(key: key);
@@ -23,6 +29,12 @@ class WidgetList extends StatelessWidget {
     {'title': 'TextField', 'page': const TextFieldDemo()},
     {'title': 'Dropdown', 'page': const DropdownDemo()},
     {'title': 'InputNumber', 'page': const InputNumberDemo()},
+    {'title': 'Switch', 'page': const SwitchDemo()},
+    {'title': 'WheelSwitch', 'page': const WheelSwitchDemo()},
+    {'title': 'Slider', 'page': const SliderDemo()},
+    {'title': 'Rate', 'page': const RateDemo()},
+    {'title': 'ImageCrop', 'page': const ImageCropDemo()},
+    {'title': 'ImagePreview', 'page': const ImagePreviewDemo()},
   ];
 
   @override

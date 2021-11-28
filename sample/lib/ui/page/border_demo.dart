@@ -55,6 +55,7 @@ class BorderDemo extends StatelessWidget {
           SizedBox(
             height: 12,
           ),
+          SizedBox(height: 12),
           Container(
             height: 40,
             width: 100,
@@ -129,7 +130,7 @@ class BorderDemo extends StatelessWidget {
           Container(
             height: 40,
             width: 200,
-            child: const EBorder(
+            child: EBorder(
               type: BorderType.dashed,
               shape: BorderShape.rrect,
               style: EBorderStyle(

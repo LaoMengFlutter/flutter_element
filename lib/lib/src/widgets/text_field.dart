@@ -3,6 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_element/src/widgets/theme/text_field_style.dart';
 import 'package:flutter_element/widgets.dart';
 
+typedef WidgetLimitBuilder = Widget Function(
+    BuildContext context, int length, int maxLength);
+
 class ETextField extends StatefulWidget {
   final String? value;
   final String? placeholder;
@@ -11,6 +14,7 @@ class ETextField extends StatefulWidget {
   final bool clear;
   final bool obscureText;
   final bool showPassword;
+  final double? height;
   final Widget? suffix;
   final Widget? prefix;
   final int? maxLines;
@@ -27,6 +31,10 @@ class ETextField extends StatefulWidget {
   ///展示字数统计
   final bool showWordLimit;
   final int? maxLength;
+  final TextStyle? textStyle;
+  final TextStyle? placeholderTextStyle;
+
+  final WidgetLimitBuilder? limitBuilder;
 
   const ETextField({
     Key? key,
@@ -37,6 +45,7 @@ class ETextField extends StatefulWidget {
     this.clear = false,
     this.obscureText = false,
     this.showPassword = false,
+    this.height,
     this.suffix,
     this.prefix,
     this.maxLines = 1,
@@ -51,6 +60,9 @@ class ETextField extends StatefulWidget {
     this.maxLength,
     this.inputFormatters,
     this.enabled,
+    this.textStyle,
+    this.placeholderTextStyle,
+    this.limitBuilder,
   }) : super(key: key);
 
   @override
@@ -62,6 +74,7 @@ class _ETextFieldState extends State<ETextField> {
   late String _value;
   late bool _showPassword;
   int _wordLength = 0;
+  double _textHeight = 0;
 
   @override
   initState() {
@@ -73,7 +86,36 @@ class _ETextFieldState extends State<ETextField> {
     super.initState();
   }
 
+  @override
+  void didUpdateWidget(covariant ETextField oldWidget) {
+    if (oldWidget.value != widget.value) {
+      _value = widget.value ?? '';
+    }
+    if (oldWidget.controller != widget.controller) {
+      _controller = widget.controller ?? TextEditingController();
+    }
+    _controller.text = _value;
+    _wordLength = _value.length;
+    _showPassword = false;
+    super.didUpdateWidget(oldWidget);
+  }
+
+  void _getTextHeight(TextStyle textStyle) {
+    var textPainter = TextPainter(
+      text: TextSpan(
+        text: '',
+        style: textStyle,
+      ),
+      textDirection: TextDirection.ltr,
+      textWidthBasis: TextWidthBasis.longestLine,
+    )..layout();
+    _textHeight = textPainter.height;
+  }
+
   void _onClickClearIcon() {
+    if (!mounted) {
+      return;
+    }
     setState(() {
       _value = '';
       _controller.text = _value;
@@ -81,12 +123,18 @@ class _ETextFieldState extends State<ETextField> {
   }
 
   void _onClickPasswordIcon() {
+    if (!mounted) {
+      return;
+    }
     setState(() {
       _showPassword = !_showPassword;
     });
   }
 
   void _onValueChange(String value) {
+    if (!mounted) {
+      return;
+    }
     setState(() {
       _value = value;
     });
@@ -101,6 +149,9 @@ class _ETextFieldState extends State<ETextField> {
     var valueLength = _controller.value.text.length;
     var composingLength =
         _controller.value.composing.end - _controller.value.composing.start;
+    if (!mounted) {
+      return;
+    }
     setState(() {
       _wordLength = valueLength - composingLength;
     });
@@ -117,7 +168,20 @@ class _ETextFieldState extends State<ETextField> {
       _inputFormatters.add(LengthLimitingTextInputFormatter(widget.maxLength));
     }
 
-    return TextField(
+    var _textStyle = widget.textStyle ?? TextStyle(color: _style?.fontColor);
+    var _placeholderTextStyle = widget.placeholderTextStyle ??
+        TextStyle(color: _style?.placeholderColor);
+    _getTextHeight(_textStyle);
+    EdgeInsetsGeometry? contentPadding;
+    if (widget.height != null) {
+      if (widget.maxLines == null || widget.maxLines == 1) {
+        contentPadding = widget.height! > _textHeight
+            ? EdgeInsets.symmetric(
+                horizontal: 12, vertical: (widget.height! - _textHeight) / 2)
+            : const EdgeInsets.symmetric(horizontal: 12, vertical: 0);
+      }
+    }
+    var textField = TextField(
       controller: _controller,
       obscureText: widget.obscureText && !_showPassword,
       maxLines: widget.maxLines,
@@ -130,7 +194,7 @@ class _ETextFieldState extends State<ETextField> {
       onSubmitted: widget.onSubmitted,
       inputFormatters: _inputFormatters,
       enabled: widget.enabled,
-      style: TextStyle(color: _style?.fontColor),
+      style: _textStyle,
       decoration: InputDecoration(
         fillColor: _style?.backgroundColor,
         filled: true,
@@ -140,7 +204,7 @@ class _ETextFieldState extends State<ETextField> {
           borderRadius: _style?.borderRadius ?? BorderRadius.zero,
         ),
         hintText: widget.placeholder,
-        hintStyle: TextStyle(color: _style?.placeholderColor),
+        hintStyle: _placeholderTextStyle,
         focusedBorder: OutlineInputBorder(
           borderSide:
               BorderSide(color: _style?.focusBorderColor ?? Colors.transparent),
@@ -148,8 +212,16 @@ class _ETextFieldState extends State<ETextField> {
         ),
         suffixIcon: _buildSuffix(_style),
         prefixIcon: widget.prefix,
+        contentPadding: contentPadding,
       ),
     );
+    if (widget.height != null) {
+      return SizedBox(
+        height: widget.height,
+        child: textField,
+      );
+    }
+    return textField;
   }
 
   Widget? _buildSuffix(ETextFieldStyle? style) {
@@ -199,10 +271,12 @@ class _ETextFieldState extends State<ETextField> {
   }
 
   Widget _buildWordLimit(ETextFieldStyle? style) {
-    var text = Text(
-      '$_wordLength/${widget.maxLength}',
-      style: TextStyle(color: style?.placeholderColor),
-    );
+    var text = widget.limitBuilder
+            ?.call(context, _wordLength, widget.maxLength ?? 0) ??
+        Text(
+          '$_wordLength/${widget.maxLength}',
+          style: TextStyle(color: style?.placeholderColor),
+        );
     if (widget.maxLines == null || widget.maxLines == 1) {
       return text;
     }

@@ -9,6 +9,7 @@ class ECheckbox extends StatefulWidget {
   final bool border;
   final ECheckboxStyle? style;
   final ValueChanged<bool?>? onChanged;
+  final bool enable;
 
   const ECheckbox({
     Key? key,
@@ -18,6 +19,7 @@ class ECheckbox extends StatefulWidget {
     this.tristate = false,
     this.border = false,
     this.style,
+    this.enable = true,
   }) : super(key: key);
 
   @override
@@ -33,7 +35,18 @@ class _ECheckboxState extends State<ECheckbox> {
     super.initState();
   }
 
+  @override
+  void didUpdateWidget(covariant ECheckbox oldWidget) {
+    if (oldWidget.value != widget.value) {
+      _value = widget.value;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   _onChanged(bool? value) {
+    if (!mounted) {
+      return;
+    }
     setState(() {
       _value = value;
     });
@@ -51,7 +64,7 @@ class _ECheckboxState extends State<ECheckbox> {
         Checkbox(
           value: _value,
           tristate: widget.tristate,
-          onChanged: _onChanged,
+          onChanged: widget.enable ? _onChanged : null,
           visualDensity: const VisualDensity(
               horizontal: VisualDensity.minimumDensity,
               vertical: VisualDensity.minimumDensity),

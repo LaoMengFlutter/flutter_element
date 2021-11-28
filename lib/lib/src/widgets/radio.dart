@@ -7,12 +7,14 @@ class ERadioItem<T> {
   final String? label;
   final ValueChanged<T?>? onChanged;
   final ERadioStyle? style;
+  final bool enable;
 
   ERadioItem({
     required this.value,
     this.label,
     this.onChanged,
     this.style,
+    this.enable = true,
   });
 }
 
@@ -59,7 +61,18 @@ class _ERadioGroupState<T> extends State<ERadioGroup<T>> {
     super.initState();
   }
 
+  @override
+  void didUpdateWidget(covariant ERadioGroup<T> oldWidget) {
+    if (oldWidget.selectValue != widget.selectValue) {
+      _selectValue = widget.selectValue;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   void _onChanged(T? value) {
+    if (!mounted) {
+      return;
+    }
     setState(() {
       _selectValue = value;
     });
@@ -87,6 +100,7 @@ class _ERadioGroupState<T> extends State<ERadioGroup<T>> {
             onChanged: _onChanged,
             style: style?.merge(e.style) ?? e.style,
             border: widget.border,
+            enable: e.enable,
           );
         }).toList()
       ],
@@ -122,7 +136,18 @@ class _ERadioButtonGroupState<T extends Object>
     super.initState();
   }
 
+  @override
+  void didUpdateWidget(covariant ERadioButtonGroup<T> oldWidget) {
+    if (oldWidget.selectValue != widget.selectValue) {
+      _selectValue = widget.selectValue;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   void _onChanged(T? value) {
+    if (!mounted) {
+      return;
+    }
     setState(() {
       _selectValue = value;
     });
@@ -163,6 +188,7 @@ class _ERadio<T> extends StatelessWidget {
   final bool checked;
   final bool border;
   final ERadioStyle? style;
+  final bool enable;
 
   const _ERadio({
     Key? key,
@@ -172,6 +198,7 @@ class _ERadio<T> extends StatelessWidget {
     this.label,
     this.border = false,
     this.style,
+    this.enable = true,
   }) : super(key: key);
 
   @override
@@ -195,7 +222,7 @@ class _ERadio<T> extends StatelessWidget {
         children: [
           Radio(
             value: value,
-            onChanged: onChanged,
+            onChanged: enable ? onChanged : null,
             groupValue: checked ? value : null,
             visualDensity: const VisualDensity(
                 horizontal: VisualDensity.minimumDensity,

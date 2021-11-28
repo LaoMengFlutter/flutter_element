@@ -28,6 +28,12 @@ class EleThemeData with Diagnosticable {
     required this.radioStyle,
     required this.checkboxStyle,
     required this.textFieldStyle,
+    required this.inputNumberStyle,
+    required this.switchStyle,
+    required this.wheelSwitchStyle,
+    required this.sliderStyle,
+    required this.rateStyle,
+    required this.imageCropStyle,
   })  : assert(primaryColor != null),
         assert(successColor != null),
         assert(warningColor != null),
@@ -50,7 +56,13 @@ class EleThemeData with Diagnosticable {
         assert(imageThemeData != null),
         assert(radioStyle != null),
         assert(checkboxStyle != null),
-        assert(textFieldStyle != null);
+        assert(textFieldStyle != null),
+        assert(inputNumberStyle != null),
+        assert(switchStyle != null),
+        assert(wheelSwitchStyle != null),
+        assert(sliderStyle != null),
+        assert(rateStyle != null),
+        assert(imageCropStyle != null);
 
   factory EleThemeData({
     Color? primaryColor,
@@ -76,6 +88,12 @@ class EleThemeData with Diagnosticable {
     ERadioStyle? radioStyle,
     ECheckboxStyle? checkboxStyle,
     ETextFieldStyle? textFieldStyle,
+    EInputNumberStyle? inputNumberStyle,
+    ESwitchStyle? switchStyle,
+    EWheelSwitchStyle? wheelSwitchStyle,
+    ESliderStyle? sliderStyle,
+    ERateStyle? rateStyle,
+    EImageCropStyle? imageCropStyle,
   }) {
     primaryColor ??= const Color(0xFF409EFF);
     successColor ??= const Color(0xFF67C23A);
@@ -154,6 +172,54 @@ class EleThemeData with Diagnosticable {
     );
     textFieldStyle = _defaultTextFieldStyle.merge(textFieldStyle);
 
+    EInputNumberStyle _defaultInputNumberStyle = EInputNumberStyle(
+      fontColor: regularTextColor,
+      backgroundColor: backgroundColorWhite,
+      borderColor: borderColorBase,
+      focusBorderColor: primaryColor,
+      borderRadius: BorderRadius.all(Radius.circular(borderRadiusBase)),
+      iconColor: regularTextColor,
+      iconBackgroundColor: backgroundColorBase,
+    );
+    inputNumberStyle = _defaultInputNumberStyle.merge(inputNumberStyle);
+
+    ESwitchStyle _defaultSwitchStyle = ESwitchStyle(
+      activeColor: primaryColor,
+      trackColor: borderColorBase,
+      thumbColor: backgroundColorWhite,
+    );
+    switchStyle = _defaultSwitchStyle.merge(switchStyle);
+
+    EWheelSwitchStyle _defaultWheelSwitchStyle = EWheelSwitchStyle(
+      activeColor: primaryColor,
+      trackColor: borderColorBase,
+      thumbColor: backgroundColorWhite,
+      inactiveThumbColor: backgroundColorWhite,
+      activeTextStyle: TextStyle(color: primaryColor, fontSize: 10),
+      inactiveTextStyle: TextStyle(color: borderColorBase, fontSize: 10),
+    );
+    wheelSwitchStyle = _defaultWheelSwitchStyle.merge(wheelSwitchStyle);
+
+    ESliderStyle _defaultSliderStyle = ESliderStyle(
+      activeColor: primaryColor,
+      inactiveColor: borderColorBase,
+      thumbColor: primaryColor,
+    );
+    sliderStyle = _defaultSliderStyle.merge(sliderStyle);
+
+    ERateStyle _defaultRateStyle = ERateStyle(
+      activeColor: primaryColor,
+      inactiveColor: borderColorBase,
+    );
+    rateStyle = _defaultRateStyle.merge(rateStyle);
+
+    EImageCropStyle _defaultImageCropStyle = EImageCropStyle(
+      borderColor: const Color(0xFFFFFFFF),
+      borderWidget: 1,
+      borderRadius: 0,
+    );
+    imageCropStyle = _defaultImageCropStyle.merge(imageCropStyle);
+
     return EleThemeData.raw(
       primaryColor: primaryColor,
       successColor: successColor,
@@ -178,6 +244,12 @@ class EleThemeData with Diagnosticable {
       radioStyle: radioStyle,
       checkboxStyle: checkboxStyle,
       textFieldStyle: textFieldStyle,
+      inputNumberStyle: inputNumberStyle,
+      switchStyle: switchStyle,
+      wheelSwitchStyle: wheelSwitchStyle,
+      sliderStyle: sliderStyle,
+      rateStyle: rateStyle,
+      imageCropStyle: imageCropStyle,
     );
   }
 
@@ -236,6 +308,12 @@ class EleThemeData with Diagnosticable {
   final ERadioStyle? radioStyle;
   final ECheckboxStyle? checkboxStyle;
   final ETextFieldStyle? textFieldStyle;
+  final EInputNumberStyle? inputNumberStyle;
+  final ESwitchStyle? switchStyle;
+  final EWheelSwitchStyle? wheelSwitchStyle;
+  final ESliderStyle? sliderStyle;
+  final ERateStyle? rateStyle;
+  final EImageCropStyle? imageCropStyle;
 
   factory EleThemeData.light() => EleThemeData();
 }

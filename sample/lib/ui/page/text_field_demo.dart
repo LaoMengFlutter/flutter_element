@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_element/widgets.dart';
 
-class TextFieldDemo extends StatelessWidget {
+class TextFieldDemo extends StatefulWidget {
   const TextFieldDemo({Key? key}) : super(key: key);
 
+  @override
+  State<TextFieldDemo> createState() => _TextFieldDemoState();
+}
+
+class _TextFieldDemoState extends State<TextFieldDemo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,12 +27,36 @@ class TextFieldDemo extends StatelessWidget {
               ),
               SizedBox(height: 12),
               ETextField(
-                value: 'element',
+                placeholder: 'please input',
+                placeholderTextStyle: TextStyle(color: Colors.red),
+              ),
+              SizedBox(height: 12),
+              ETextField(
+                value: 'Flutter Element',
+              ),
+              SizedBox(height: 12),
+              ETextField(
+                value: 'Flutter Element',
+                textStyle: TextStyle(color: Colors.blue),
+              ),
+              SizedBox(height: 12),
+              ETextField(
+                height: 30,
+                value: 'Flutter Element',
+              ),
+              SizedBox(height: 12),
+              ETextField(
+                height: 140,
+                value: 'Flutter Element',
+              ),
+              SizedBox(height: 12),
+              ETextField(
+                height: 130,
                 placeholder: 'please input',
               ),
               SizedBox(height: 12),
               ETextField(
-                value: 'element',
+                value: 'Flutter Element',
                 placeholder: 'please input',
                 style: ETextFieldStyle(
                   fontColor: Colors.red,
@@ -45,12 +74,10 @@ class TextFieldDemo extends StatelessWidget {
               ),
               SizedBox(height: 12),
               ETextField(
-                placeholder: 'please input',
                 obscureText: true,
               ),
               SizedBox(height: 12),
               ETextField(
-                placeholder: 'please input',
                 obscureText: true,
                 showPassword: true,
               ),
@@ -75,12 +102,10 @@ class TextFieldDemo extends StatelessWidget {
                 prefix: Icon(Icons.search),
               ),
               SizedBox(height: 12),
-              Container(
+              ETextField(
                 height: 200,
-                child: ETextField(
-                  placeholder: 'please input',
-                  maxLines: 10,
-                ),
+                placeholder: 'please input',
+                maxLines: 10,
               ),
               SizedBox(height: 12),
               ETextField(
@@ -88,16 +113,32 @@ class TextFieldDemo extends StatelessWidget {
                 maxLength: 10,
               ),
               SizedBox(height: 12),
-              Container(
+              ETextField(
                 height: 200,
-                child: ETextField(
-                  placeholder: 'please input',
-                  maxLines: 10,
-                  showWordLimit: true,
-                  maxLength: 100,
-                ),
+                maxLines: 10,
+                showWordLimit: true,
+                maxLength: 100,
               ),
               SizedBox(height: 12),
+              ETextField(
+                height: 200,
+                maxLines: 10,
+                showWordLimit: true,
+                maxLength: 100,
+                limitBuilder: (context, length, maxLength) {
+                  return Row(
+                    children: [
+                      Text(
+                        '$length',
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                      Text('/$maxLength'),
+                    ],
+                  );
+                },
+              ),
+
+              SizedBox(height: 120),
             ],
           ),
         ),

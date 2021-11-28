@@ -5,19 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_element/widgets.dart';
 
-class InputNumber extends StatefulWidget {
+class EInputNumber extends StatefulWidget {
   final double? value;
-  final ETextFieldStyle? style;
+  final EInputNumberStyle? style;
   final TextEditingController? controller;
-  final int height;
+  final double height;
   final double min;
   final double max;
   final double step;
+  final InputNumberControlType type;
+  final ValueChanged<double?>? onChanged;
 
   /// 精度
   final int precision;
 
-  const InputNumber({
+  const EInputNumber({
     Key? key,
     this.value,
     this.style,
@@ -27,26 +29,53 @@ class InputNumber extends StatefulWidget {
     this.max = double.infinity,
     this.step = 1,
     this.precision = 0,
+    this.type = InputNumberControlType.side,
+    this.onChanged,
   }) : super(key: key);
 
   @override
   _InputNumberState createState() => _InputNumberState();
 }
 
-class _InputNumberState extends State<InputNumber> {
+class _InputNumberState extends State<EInputNumber> {
   late TextEditingController _controller;
   double? _value;
   bool _isMax = false;
   bool _isMin = false;
+  double _textHeight = 0;
 
   @override
   initState() {
     _value = widget.value;
     _controller = widget.controller ?? TextEditingController()
-      ..value = TextEditingValue(text: '${_value ?? ''}');
+      ..value = TextEditingValue(text: _valueFormat);
+    _getTextHeight();
     _checkMax();
     _checkMin();
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant EInputNumber oldWidget) {
+    if (oldWidget.value != widget.value) {
+      _value = widget.value;
+    }
+    _controller = widget.controller ?? TextEditingController()
+      ..value = TextEditingValue(text: _valueFormat);
+    _checkMax();
+    _checkMin();
+    super.didUpdateWidget(oldWidget);
+  }
+
+  void _getTextHeight() {
+    var textPainter = TextPainter(
+      text: const TextSpan(
+        text: '',
+      ),
+      textDirection: TextDirection.ltr,
+      textWidthBasis: TextWidthBasis.longestLine,
+    )..layout();
+    _textHeight = textPainter.height;
   }
 
   void _onClickAdd() {
@@ -87,28 +116,21 @@ class _InputNumberState extends State<InputNumber> {
 
   void _updateValue() {
     if (mounted) {
-      var text = _value?.toStringAsFixed(widget.precision) ?? '';
-      var textPainter = TextPainter(
-        text: TextSpan(
-          text: text,
-        ),
-        textDirection: TextDirection.ltr,
-        textWidthBasis: TextWidthBasis.longestLine,
-      )..layout();
-      print('text height:${textPainter.height}');
       setState(() {
         _controller.value = TextEditingValue(
-          text: text,
+          text: _valueFormat,
           selection: TextSelection.fromPosition(
             TextPosition(
               affinity: TextAffinity.downstream,
-              offset: text.length,
+              offset: _valueFormat.length,
             ),
           ),
         );
       });
     }
   }
+
+  String get _valueFormat => _value?.toStringAsFixed(widget.precision) ?? '';
 
   void _onChange(String value) {
     if (value.isEmpty) {
@@ -126,34 +148,63 @@ class _InputNumberState extends State<InputNumber> {
     _checkMax();
     _checkMin();
     _updateValue();
+    widget.onChanged?.call(_value);
   }
 
   @override
   Widget build(BuildContext context) {
     EleThemeData eleTheme = EleTheme.of(context);
-    var _style = eleTheme.textFieldStyle?.merge(widget.style) ?? widget.style;
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: _buildTextField(_style),
+    var _style = eleTheme.inputNumberStyle?.merge(widget.style) ?? widget.style;
+
+    if (widget.type == InputNumberControlType.side) {
+      return SizedBox(
+        height: widget.height,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: _buildTextField(_style),
+            ),
+            Positioned(
+              right: 0,
+              bottom: 0,
+              top: 0,
+              child: _buildAdd(Icons.add, _style),
+            ),
+            Positioned(
+              left: 0,
+              bottom: 0,
+              top: 0,
+              child: _buildReduce(Icons.remove, _style),
+            ),
+          ],
         ),
-        Positioned(
-          right: 0,
-          bottom: 0,
-          top: 0,
-          child: _buildAdd(),
+      );
+    } else {
+      return SizedBox(
+        height: widget.height,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: _buildTextField(_style),
+            ),
+            Positioned(
+              right: 0,
+              bottom: 0,
+              top: 0,
+              child: Column(
+                children: [
+                  Expanded(child: _buildAdd(Icons.expand_less, _style)),
+                  Expanded(child: _buildReduce(Icons.expand_more, _style)),
+                ],
+              ),
+            ),
+          ],
         ),
-        Positioned(
-          left: 0,
-          bottom: 0,
-          top: 0,
-          child: _buildReduce(),
-        ),
-      ],
-    );
+      );
+    }
   }
 
-  Widget _buildTextField(ETextFieldStyle? style) {
+  Widget _buildTextField(EInputNumberStyle? style) {
     return TextField(
       controller: _controller,
       keyboardType: TextInputType.number,
@@ -177,28 +228,56 @@ class _InputNumberState extends State<InputNumber> {
               BorderSide(color: style?.focusBorderColor ?? Colors.transparent),
           borderRadius: style?.borderRadius ?? BorderRadius.zero,
         ),
-        contentPadding: widget.height > 17
-            ? EdgeInsets.symmetric(vertical: (widget.height-8.5) / 2)
-            : EdgeInsets.zero,
+        contentPadding: EdgeInsets.only(
+          top: widget.height > _textHeight
+              ? (widget.height - _textHeight / 2) / 2
+              : 0,
+          bottom: widget.height > _textHeight
+              ? (widget.height - _textHeight / 2) / 2
+              : 0,
+          left: 0,
+          right: widget.type == InputNumberControlType.side ? 0 : widget.height,
+        ),
       ),
       maxLines: 1,
       // maxLines: 1000,
     );
   }
 
-  Widget _buildAdd() {
+  Widget _buildAdd(IconData iconData, EInputNumberStyle? style) {
+    double paddingBottom = (widget.type == InputNumberControlType.side) ? 1 : 0;
     return GestureDetector(
       onTap: _onClickAdd,
       child: Padding(
-        padding: const EdgeInsets.only(top: 1, bottom: 1, right: 1),
+        padding: EdgeInsets.only(top: 1, bottom: paddingBottom, right: 1),
         child: AspectRatio(
-          aspectRatio: 1,
-          child: Container(
-            // alignment: Alignment.center,
-            color: Colors.red,
-            child: Icon(
-              Icons.add,
-              size: widget.height / 2,
+          aspectRatio: widget.type == InputNumberControlType.side ? 1 : 2 / 1,
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.zero,
+              topRight: style?.borderRadius?.topRight ?? Radius.zero,
+              bottomLeft: Radius.zero,
+              bottomRight: (widget.type == InputNumberControlType.side)
+                  ? style?.borderRadius?.bottomRight ?? Radius.zero
+                  : Radius.zero,
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: style?.iconBackgroundColor,
+                border: Border(
+                  left: BorderSide(
+                      color: style?.borderColor ?? Colors.transparent),
+                  bottom: widget.type == InputNumberControlType.side
+                      ? BorderSide.none
+                      : BorderSide(
+                          color: style?.borderColor ?? Colors.transparent),
+                ),
+              ),
+              child: Icon(
+                iconData,
+                size: widget.height / 2,
+                color: style?.iconColor,
+              ),
             ),
           ),
         ),
@@ -206,23 +285,62 @@ class _InputNumberState extends State<InputNumber> {
     );
   }
 
-  Widget _buildReduce() {
+  Widget _buildReduce(IconData iconData, EInputNumberStyle? style) {
     return GestureDetector(
       onTap: _onClickReduce,
       child: Padding(
-        padding: const EdgeInsets.only(top: 1, bottom: 1, right: 1),
+        padding: EdgeInsets.only(
+          top: (widget.type == InputNumberControlType.side) ? 1 : 0,
+          bottom: 1,
+          left: (widget.type == InputNumberControlType.side) ? 1 : 0,
+          right: (widget.type == InputNumberControlType.side) ? 0 : 1,
+        ),
         child: AspectRatio(
-          aspectRatio: 1,
-          child: Container(
-            // alignment: Alignment.center,
-            color: Colors.red,
-            child: Icon(
-              Icons.remove,
-              size: widget.height / 2,
+          aspectRatio: widget.type == InputNumberControlType.side ? 1 : 2 / 1,
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: (widget.type == InputNumberControlType.side)
+                  ? style?.borderRadius?.topLeft ?? Radius.zero
+                  : Radius.zero,
+              topRight: Radius.zero,
+              bottomLeft: (widget.type == InputNumberControlType.side)
+                  ? style?.borderRadius?.bottomLeft ?? Radius.zero
+                  : Radius.zero,
+              bottomRight: (widget.type == InputNumberControlType.side)
+                  ? Radius.zero
+                  : style?.borderRadius?.bottomRight ?? Radius.zero,
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: style?.iconBackgroundColor,
+                border: Border(
+                  right: widget.type == InputNumberControlType.side
+                      ? BorderSide(
+                          color: style?.borderColor ?? Colors.transparent)
+                      : BorderSide.none,
+                  left: widget.type == InputNumberControlType.side
+                      ? BorderSide.none
+                      : BorderSide(
+                          color: style?.borderColor ?? Colors.transparent),
+                ),
+              ),
+              child: Icon(
+                iconData,
+                size: widget.height / 2,
+                color: style?.iconColor,
+              ),
             ),
           ),
         ),
       ),
     );
   }
+}
+
+enum InputNumberControlType {
+  /// 两边
+  side,
+
+  /// 右边
+  right,
 }

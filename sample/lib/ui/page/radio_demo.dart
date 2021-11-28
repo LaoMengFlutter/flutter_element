@@ -30,6 +30,22 @@ class RadioDemo extends StatelessWidget {
               height: 12,
             ),
             ERadioGroup(
+              radios: [
+                ERadioItem(
+                  value: '1',
+                  label: '禁用',
+                  enable: false,
+                ),
+                ERadioItem(
+                  value: '2',
+                  label: '备选项',
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            ERadioGroup(
               selectValue: '1',
               onChanged: (value) {
                 print('ERadioGroup onChanged value:$value');
