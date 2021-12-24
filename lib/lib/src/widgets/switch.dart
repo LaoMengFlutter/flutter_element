@@ -47,9 +47,9 @@ class _ESwitchState extends State<ESwitch> {
     return CupertinoSwitch(
       value: _value,
       onChanged: widget.enable ? _onChanged : null,
-      activeColor: _style?.activeColor,
-      trackColor: _style?.trackColor,
-      thumbColor: _style?.thumbColor,
+      activeColor: _style?.activeColor ?? eleTheme.primaryColor,
+      trackColor: _style?.trackColor ?? eleTheme.borderColorBase,
+      thumbColor: _style?.thumbColor ?? eleTheme.backgroundColorWhite,
     );
   }
 

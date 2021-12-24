@@ -2,26 +2,23 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'border_style.dart';
-import 'button_theme_data.dart';
+import 'button_style.dart';
 import 'checkbox_style.dart';
+import 'dropdown_style.dart';
 import 'image_crop_style.dart';
-import 'image_theme_data.dart';
+import 'image_style.dart';
 import 'input_number_style.dart';
 import 'radio_style.dart';
 import 'rate_style.dart';
 import 'slider_style.dart';
 import 'switch_style.dart';
 import 'text_field_style.dart';
-import 'wheel_switch_style.dart';
-
+import 'dialog_style.dart';
+import 'page_view_style.dart';
 
 class EleThemeData with Diagnosticable {
   const EleThemeData.raw({
     required this.primaryColor,
-    required this.successColor,
-    required this.warningColor,
-    required this.dangerColor,
-    required this.infoColor,
     required this.primaryTextColor,
     required this.regularTextColor,
     required this.secondaryTextColor,
@@ -35,22 +32,20 @@ class EleThemeData with Diagnosticable {
     required this.backgroundColorBlack,
     required this.borderRadiusBase,
     required this.borderStyle,
-    required this.buttonThemeData,
-    required this.imageThemeData,
+    required this.buttonStyle,
+    required this.imageStyle,
     required this.radioStyle,
     required this.checkboxStyle,
     required this.textFieldStyle,
     required this.inputNumberStyle,
     required this.switchStyle,
-    required this.wheelSwitchStyle,
     required this.sliderStyle,
     required this.rateStyle,
     required this.imageCropStyle,
+    required this.dropdownStyle,
+    required this.pageViewStyle,
+    required this.dialogStyle,
   })  : assert(primaryColor != null),
-        assert(successColor != null),
-        assert(warningColor != null),
-        assert(dangerColor != null),
-        assert(infoColor != null),
         assert(primaryTextColor != null),
         assert(regularTextColor != null),
         assert(secondaryTextColor != null),
@@ -64,17 +59,19 @@ class EleThemeData with Diagnosticable {
         assert(backgroundColorBlack != null),
         assert(borderRadiusBase != null),
         assert(borderStyle != null),
-        assert(buttonThemeData != null),
-        assert(imageThemeData != null),
+        assert(buttonStyle != null),
+        assert(imageStyle != null),
         assert(radioStyle != null),
         assert(checkboxStyle != null),
         assert(textFieldStyle != null),
         assert(inputNumberStyle != null),
         assert(switchStyle != null),
-        assert(wheelSwitchStyle != null),
         assert(sliderStyle != null),
         assert(rateStyle != null),
-        assert(imageCropStyle != null);
+        assert(imageCropStyle != null),
+        assert(dropdownStyle != null),
+        assert(pageViewStyle != null),
+        assert(dialogStyle != null);
 
   factory EleThemeData({
     Color? primaryColor,
@@ -95,17 +92,19 @@ class EleThemeData with Diagnosticable {
     Color? backgroundColorBlack,
     double? borderRadiusBase,
     EBorderStyle? borderStyle,
-    EleButtonThemeData? buttonThemeData,
-    EleImageThemeData? imageThemeData,
+    EButtonStyle? buttonStyle,
+    EImageStyle? imageStyle,
     ERadioStyle? radioStyle,
     ECheckboxStyle? checkboxStyle,
     ETextFieldStyle? textFieldStyle,
     EInputNumberStyle? inputNumberStyle,
     ESwitchStyle? switchStyle,
-    EWheelSwitchStyle? wheelSwitchStyle,
     ESliderStyle? sliderStyle,
     ERateStyle? rateStyle,
     EImageCropStyle? imageCropStyle,
+    EDropdownStyle? dropdownStyle,
+    EPageViewStyle? pageViewStyle,
+    EDialogStyle? dialogStyle,
   }) {
     primaryColor ??= const Color(0xFF409EFF);
     successColor ??= const Color(0xFF67C23A);
@@ -129,115 +128,61 @@ class EleThemeData with Diagnosticable {
 
     borderRadiusBase ??= 4.0;
 
-    final EBorderStyle _defaultBorderStyle = EBorderStyle(
-      color: borderColorBase,
-      strokeWidth: 1,
-      dashGap: 3,
-      dashWidth: 3,
-      radius: BorderRadius.all(Radius.circular(borderRadiusBase)),
-      padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12),
-    );
-    final EBorderStyle _defaultCheckedBorderStyle =
-        _defaultBorderStyle.merge(EBorderStyle(color: primaryColor));
-
-    borderStyle = _defaultCheckedBorderStyle.merge(borderStyle);
-    buttonThemeData ??= const EleButtonThemeData();
-
-    EleImageThemeData _defaultImageTheme =
-        EleImageThemeData.from(borderColorLight);
-    imageThemeData = _defaultImageTheme.merge(imageThemeData);
-
-    ERadioStyle _defaultRadioStyle = ERadioStyle(
-        fontColor: regularTextColor,
-        backgroundColor: backgroundColorWhite,
-        borderColor: borderColorBase,
-        checkedFontColor: primaryColor,
-        checkedBorderColor: primaryColor,
-        checkedBackgroundColor: backgroundColorWhite,
-        buttonCheckedBorderColor: primaryColor,
-        buttonCheckedFontColor: backgroundColorWhite,
-        borderRadius: BorderRadius.all(Radius.circular(borderRadiusBase)),
-        padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12),
-        space: 3.0);
-    radioStyle = _defaultRadioStyle.merge(radioStyle);
-
-    ECheckboxStyle _defaultCheckboxStyle = ECheckboxStyle(
-        fontColor: regularTextColor,
-        backgroundColor: backgroundColorWhite,
-        checkedFontColor: primaryColor,
-        checkedBackgroundColor: backgroundColorWhite,
-        borderColor: borderColorBase,
-        checkedBorderColor: primaryColor,
-        borderRadius: BorderRadius.all(Radius.circular(borderRadiusBase)),
-        padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12),
-        space: 3.0);
-    checkboxStyle = _defaultCheckboxStyle.merge(checkboxStyle);
-
-    ETextFieldStyle _defaultTextFieldStyle = ETextFieldStyle(
-      fontColor: regularTextColor,
-      backgroundColor: backgroundColorWhite,
-      placeholderColor: placeholderColor,
-      borderColor: borderColorBase,
-      focusBorderColor: primaryColor,
-      borderRadius: BorderRadius.all(Radius.circular(borderRadiusBase)),
-      clearColor: borderColorBase,
-    );
-    textFieldStyle = _defaultTextFieldStyle.merge(textFieldStyle);
-
-    EInputNumberStyle _defaultInputNumberStyle = EInputNumberStyle(
-      fontColor: regularTextColor,
-      backgroundColor: backgroundColorWhite,
-      borderColor: borderColorBase,
-      focusBorderColor: primaryColor,
-      borderRadius: BorderRadius.all(Radius.circular(borderRadiusBase)),
-      iconColor: regularTextColor,
-      iconBackgroundColor: backgroundColorBase,
-    );
-    inputNumberStyle = _defaultInputNumberStyle.merge(inputNumberStyle);
-
-    ESwitchStyle _defaultSwitchStyle = ESwitchStyle(
-      activeColor: primaryColor,
-      trackColor: borderColorBase,
-      thumbColor: backgroundColorWhite,
-    );
-    switchStyle = _defaultSwitchStyle.merge(switchStyle);
-
-    EWheelSwitchStyle _defaultWheelSwitchStyle = EWheelSwitchStyle(
-      activeColor: primaryColor,
-      trackColor: borderColorBase,
-      thumbColor: backgroundColorWhite,
-      inactiveThumbColor: backgroundColorWhite,
-      activeTextStyle: TextStyle(color: primaryColor, fontSize: 10),
-      inactiveTextStyle: TextStyle(color: borderColorBase, fontSize: 10),
-    );
-    wheelSwitchStyle = _defaultWheelSwitchStyle.merge(wheelSwitchStyle);
-
-    ESliderStyle _defaultSliderStyle = ESliderStyle(
-      activeColor: primaryColor,
-      inactiveColor: borderColorBase,
-      thumbColor: primaryColor,
-    );
-    sliderStyle = _defaultSliderStyle.merge(sliderStyle);
-
-    ERateStyle _defaultRateStyle = ERateStyle(
-      activeColor: primaryColor,
-      inactiveColor: borderColorBase,
-    );
-    rateStyle = _defaultRateStyle.merge(rateStyle);
-
-    EImageCropStyle _defaultImageCropStyle = EImageCropStyle(
-      borderColor: const Color(0xFFFFFFFF),
-      borderWidget: 1,
-      borderRadius: 0,
-    );
-    imageCropStyle = _defaultImageCropStyle.merge(imageCropStyle);
+    // const EBorderStyle _defaultBorderStyle = EBorderStyle();
+    //
+    // borderStyle = _defaultBorderStyle.merge(borderStyle);
+    //
+    // final EButtonStyle _defaultButtonStyle = EButtonStyle(
+    //   loadingColor: Colors.white,
+    //   radius: BorderRadius.all(Radius.circular(borderRadiusBase)),
+    // );
+    //
+    // buttonStyle = _defaultButtonStyle.merge(buttonStyle);
+    //
+    // EImageStyle _defaultImageStyle = EImageStyle.from(borderColorLight);
+    // imageStyle = _defaultImageStyle.merge(imageStyle);
+    //
+    // ERadioStyle _defaultRadioStyle = ERadioStyle(
+    //   padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12),
+    //   space: 3.0,
+    // );
+    // radioStyle = _defaultRadioStyle.merge(radioStyle);
+    //
+    // ECheckboxStyle _defaultCheckboxStyle = ECheckboxStyle(
+    //   padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12),
+    //   space: 3.0,
+    // );
+    // checkboxStyle = _defaultCheckboxStyle.merge(checkboxStyle);
+    //
+    // textFieldStyle = textFieldStyle ?? ETextFieldStyle();
+    // inputNumberStyle = inputNumberStyle ?? const EInputNumberStyle();
+    // switchStyle = switchStyle ?? ESwitchStyle();
+    // sliderStyle = sliderStyle ?? ESliderStyle();
+    //
+    // ERateStyle _defaultRateStyle = ERateStyle(
+    //   activeColor: primaryColor,
+    //   inactiveColor: borderColorBase,
+    // );
+    // rateStyle = _defaultRateStyle.merge(rateStyle);
+    //
+    // EImageCropStyle _defaultImageCropStyle = EImageCropStyle(
+    //   borderColor: const Color(0xFFFFFFFF),
+    //   borderWidget: 1,
+    //   borderRadius: 0,
+    // );
+    // imageCropStyle = _defaultImageCropStyle.merge(imageCropStyle);
+    // dropdownStyle = dropdownStyle ?? EDropdownStyle();
+    // pageViewStyle = pageViewStyle ?? EPageViewStyle();
+    //
+    // EDialogStyle _defaultDialogStyle = EDialogStyle(
+    //   backgroundColor: backgroundColorWhite,
+    //   borderColor: borderColorBase,
+    //   borderRadius: BorderRadius.all(Radius.circular(borderRadiusBase)),
+    // );
+    // dialogStyle = _defaultDialogStyle.merge(dialogStyle);
 
     return EleThemeData.raw(
       primaryColor: primaryColor,
-      successColor: successColor,
-      warningColor: warningColor,
-      dangerColor: dangerColor,
-      infoColor: infoColor,
       primaryTextColor: primaryTextColor,
       regularTextColor: regularTextColor,
       secondaryTextColor: secondaryTextColor,
@@ -250,18 +195,20 @@ class EleThemeData with Diagnosticable {
       backgroundColorWhite: backgroundColorWhite,
       backgroundColorBlack: backgroundColorBlack,
       borderRadiusBase: borderRadiusBase,
-      borderStyle: borderStyle,
-      buttonThemeData: buttonThemeData,
-      imageThemeData: imageThemeData,
-      radioStyle: radioStyle,
-      checkboxStyle: checkboxStyle,
-      textFieldStyle: textFieldStyle,
-      inputNumberStyle: inputNumberStyle,
-      switchStyle: switchStyle,
-      wheelSwitchStyle: wheelSwitchStyle,
-      sliderStyle: sliderStyle,
-      rateStyle: rateStyle,
-      imageCropStyle: imageCropStyle,
+      borderStyle: borderStyle ?? EBorderStyle(),
+      buttonStyle: buttonStyle ?? EButtonStyle(),
+      imageStyle: imageStyle ?? EImageStyle(),
+      radioStyle: radioStyle ?? ERadioStyle(),
+      checkboxStyle: checkboxStyle ?? ECheckboxStyle(),
+      textFieldStyle: textFieldStyle ?? ETextFieldStyle(),
+      inputNumberStyle: inputNumberStyle ?? EInputNumberStyle(),
+      switchStyle: switchStyle ?? ESwitchStyle(),
+      sliderStyle: sliderStyle ?? ESliderStyle(),
+      rateStyle: rateStyle ?? ERateStyle(),
+      imageCropStyle: imageCropStyle ?? EImageCropStyle(),
+      dropdownStyle: dropdownStyle ?? EDropdownStyle(),
+      pageViewStyle: pageViewStyle ?? EPageViewStyle(),
+      dialogStyle: dialogStyle ?? EDialogStyle(),
     );
   }
 
@@ -269,18 +216,6 @@ class EleThemeData with Diagnosticable {
   ///
   /// if is null,value is theme primaryColor
   final Color? primaryColor;
-
-  /// success color
-  final Color? successColor;
-
-  /// warning color
-  final Color? warningColor;
-
-  /// danger color
-  final Color? dangerColor;
-
-  /// info color
-  final Color? infoColor;
 
   /// primary text color
   final Color? primaryTextColor;
@@ -312,20 +247,83 @@ class EleThemeData with Diagnosticable {
   final EBorderStyle? borderStyle;
 
   /// button theme data
-  final EleButtonThemeData? buttonThemeData;
+  final EButtonStyle? buttonStyle;
 
   /// image theme
-  final EleImageThemeData? imageThemeData;
+  final EImageStyle? imageStyle;
 
   final ERadioStyle? radioStyle;
   final ECheckboxStyle? checkboxStyle;
   final ETextFieldStyle? textFieldStyle;
   final EInputNumberStyle? inputNumberStyle;
   final ESwitchStyle? switchStyle;
-  final EWheelSwitchStyle? wheelSwitchStyle;
   final ESliderStyle? sliderStyle;
   final ERateStyle? rateStyle;
   final EImageCropStyle? imageCropStyle;
+  final EDropdownStyle? dropdownStyle;
+  final EPageViewStyle? pageViewStyle;
+  final EDialogStyle? dialogStyle;
 
   factory EleThemeData.light() => EleThemeData();
+
+  EleThemeData merge({
+    Color? primaryColor,
+    Color? primaryTextColor,
+    Color? regularTextColor,
+    Color? secondaryTextColor,
+    Color? placeholderColor,
+    Color? borderColorBase,
+    Color? borderColorLight,
+    Color? borderColorLighter,
+    Color? borderColorExtraLight,
+    Color? backgroundColorBase,
+    Color? backgroundColorWhite,
+    Color? backgroundColorBlack,
+    double? borderRadiusBase,
+    EBorderStyle? borderStyle,
+    EButtonStyle? buttonStyle,
+    EImageStyle? imageStyle,
+    ERadioStyle? radioStyle,
+    ECheckboxStyle? checkboxStyle,
+    ETextFieldStyle? textFieldStyle,
+    EInputNumberStyle? inputNumberStyle,
+    ESwitchStyle? switchStyle,
+    ESliderStyle? sliderStyle,
+    ERateStyle? rateStyle,
+    EImageCropStyle? imageCropStyle,
+    EDropdownStyle? dropdownStyle,
+    EPageViewStyle? pageViewStyle,
+    EDialogStyle? dialogStyle,
+  }) {
+    return EleThemeData(
+      primaryColor: primaryColor ?? this.primaryColor,
+      primaryTextColor: primaryTextColor ?? this.primaryTextColor,
+      regularTextColor: regularTextColor ?? this.regularTextColor,
+      secondaryTextColor: secondaryTextColor ?? this.secondaryTextColor,
+      placeholderColor: placeholderColor ?? this.placeholderColor,
+      borderColorBase: borderColorBase ?? this.borderColorBase,
+      borderColorLight: borderColorLight ?? this.borderColorLight,
+      borderColorLighter: borderColorLighter ?? this.borderColorLighter,
+      borderColorExtraLight:
+          borderColorExtraLight ?? this.borderColorExtraLight,
+      backgroundColorBase: backgroundColorBase ?? this.backgroundColorBase,
+      backgroundColorWhite: backgroundColorWhite ?? this.backgroundColorWhite,
+      backgroundColorBlack: backgroundColorBlack ?? this.backgroundColorBlack,
+      borderRadiusBase: borderRadiusBase ?? this.borderRadiusBase,
+      borderStyle: borderStyle ?? this.borderStyle,
+      buttonStyle: buttonStyle ?? this.buttonStyle,
+      imageStyle: imageStyle ?? this.imageStyle,
+      radioStyle: radioStyle ?? this.radioStyle,
+      checkboxStyle: checkboxStyle ?? this.checkboxStyle,
+      textFieldStyle: textFieldStyle ?? this.textFieldStyle,
+      inputNumberStyle: inputNumberStyle ?? this.inputNumberStyle,
+      switchStyle: switchStyle ?? this.switchStyle,
+      sliderStyle: sliderStyle ?? this.sliderStyle,
+      rateStyle: rateStyle ?? this.rateStyle,
+      imageCropStyle: imageCropStyle ?? this.imageCropStyle,
+      dropdownStyle: dropdownStyle ?? this.dropdownStyle,
+      pageViewStyle: pageViewStyle ?? this.pageViewStyle,
+      dialogStyle: dialogStyle ?? this.dialogStyle,
+    );
+  }
 }

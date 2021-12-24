@@ -1,4 +1,4 @@
-import 'package:flutter_element/widgets.dart';
+import 'package:element_ui/widgets.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,145 +22,57 @@ class ButtonDemo extends StatelessWidget {
             ),
             EButton(
               onPressed: () {},
-              style: EleButtonThemeData(status: EleThemeStatus.primary),
-              child: Text('主要按钮'),
+              shape: BoxShape.rectangle,
+              radius: BorderRadius.all(Radius.circular(0)),
+              child: Text('矩形按钮'),
             ),
             EButton(
               onPressed: () {},
-              style: EleButtonThemeData(status: EleThemeStatus.success),
-              child: Text('成功按钮'),
+              shape: BoxShape.rectangle,
+              radius: BorderRadius.all(Radius.circular(5)),
+              child: Text('圆角矩形按钮'),
             ),
             EButton(
               onPressed: () {},
-              style: EleButtonThemeData(status: EleThemeStatus.info),
-              child: Text('信息按钮'),
+              shape: BoxShape.rectangle,
+              radius: BorderRadius.circular(30),
+              child: Text('按钮'),
             ),
             EButton(
               onPressed: () {},
-              style: EleButtonThemeData(status: EleThemeStatus.danger),
-              child: Text('危险按钮'),
+              shape: BoxShape.circle,
+              child: Text('圆形'),
             ),
             EButton(
               onPressed: () {},
-              style: EleButtonThemeData(status: EleThemeStatus.warning),
-              child: Text('警告按钮'),
+              borderStyle: EButtonBorderStyle.stroke,
+              child: Text('边框按钮'),
             ),
             EButton(
               onPressed: () {},
-              style: EleButtonThemeData(
-                  status: EleThemeStatus.primary, plain: true),
-              child: Text('主要按钮'),
+              borderStyle: EButtonBorderStyle.none,
+              child: Text('文字按钮'),
             ),
             EButton(
               onPressed: () {},
-              style: EleButtonThemeData(
-                  status: EleThemeStatus.success, plain: true),
-              child: Text('成功按钮'),
+              child: Text('文字大小按钮'),
             ),
             EButton(
               onPressed: () {},
-              style:
-                  EleButtonThemeData(status: EleThemeStatus.info, plain: true),
-              child: Text('信息按钮'),
+              child: Text('红色文字按钮'),
             ),
             EButton(
               onPressed: () {},
-              style: EleButtonThemeData(
-                  status: EleThemeStatus.danger, plain: true),
-              child: Text('危险按钮'),
+              child: Text('背景黑色按钮'),
             ),
             EButton(
               onPressed: () {},
-              style: EleButtonThemeData(
-                  status: EleThemeStatus.warning, plain: true),
-              child: Text('警告按钮'),
+              borderStyle: EButtonBorderStyle.stroke,
+              child: Text('边框按钮'),
             ),
             EButton(
               onPressed: () {},
-              style: EleButtonThemeData(shape: ButtonShape.round),
-              child: Text('圆角按钮'),
-            ),
-            EButton(
-              onPressed: () {},
-              style: EleButtonThemeData(
-                status: EleThemeStatus.primary,
-                shape: ButtonShape.round,
-              ),
-              child: Text('圆角按钮'),
-            ),
-            EButton(
-              onPressed: () {},
-              style: EleButtonThemeData(status: EleThemeStatus.primary),
-              child: Icon(Icons.arrow_right),
-            ),
-            EButton(
-              onPressed: null,
-              style: EleButtonThemeData(status: EleThemeStatus.primary),
-              child: Text('禁用按钮'),
-            ),
-            EButton(
-              onPressed: null,
-              child: Text('默认按钮'),
-            ),
-            EButton(
-              onPressed: null,
-              style: EleButtonThemeData(status: EleThemeStatus.primary),
-              child: Text('主要按钮'),
-            ),
-            EButton(
-              onPressed: null,
-              style: EleButtonThemeData(status: EleThemeStatus.success),
-              child: Text('成功按钮'),
-            ),
-            EButton(
-              onPressed: null,
-              style: EleButtonThemeData(status: EleThemeStatus.info),
-              child: Text('信息按钮'),
-            ),
-            EButton(
-              onPressed: null,
-              style: EleButtonThemeData(status: EleThemeStatus.danger),
-              child: Text('危险按钮'),
-            ),
-            EButton(
-              onPressed: null,
-              style: EleButtonThemeData(status: EleThemeStatus.warning),
-              child: Text('警告按钮'),
-            ),
-            EButton(
-              onPressed: null,
-              style: EleButtonThemeData(
-                  status: EleThemeStatus.primary, plain: true),
-              child: Text('主要按钮'),
-            ),
-            EButton(
-              onPressed: null,
-              style: EleButtonThemeData(
-                  status: EleThemeStatus.success, plain: true),
-              child: Text('成功按钮'),
-            ),
-            EButton(
-              onPressed: null,
-              style:
-                  EleButtonThemeData(status: EleThemeStatus.info, plain: true),
-              child: Text('信息按钮'),
-            ),
-            EButton(
-              onPressed: null,
-              style: EleButtonThemeData(
-                  status: EleThemeStatus.danger, plain: true),
-              child: Text('危险按钮'),
-            ),
-            EButton(
-              onPressed: null,
-              style: EleButtonThemeData(
-                  status: EleThemeStatus.warning, plain: true),
-              child: Text('警告按钮'),
-            ),
-            EButton(
-              onPressed: null,
-              style: EleButtonThemeData(shape: ButtonShape.round),
-              child: Text('圆角按钮'),
+              child: Text('水波纹按钮'),
             ),
             EButton(
               onPressed: () {
@@ -170,14 +82,21 @@ class ButtonDemo extends StatelessWidget {
               child: Text('加载中'),
             ),
             EButton(
-              onPressed: () {
-                print('onPressed');
-              },
-              loading: true,
-              style: EleButtonThemeData(
-                status: EleThemeStatus.primary,
-              ),
-              child: Text('加载中'),
+              onPressed: () {},
+              gradientColors: [Colors.red, Colors.blue],
+              child: Text('渐变按钮'),
+            ),
+            EButton(
+              onPressed: () {},
+              shape: BoxShape.circle,
+              gradientColors: [Colors.red, Colors.blue],
+              child: Text('渐变按钮'),
+            ),
+            EButton(
+              onPressed: () {},
+              gradientColors: [Colors.red, Colors.blue],
+              radius: BorderRadius.circular(20),
+              child: Text('渐变按钮'),
             ),
           ],
         ),

@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -21,6 +20,19 @@ class EImage extends StatelessWidget {
     this.loadingBuilder,
     this.errorWidget,
     this.errorBuilder,
+    this.frameBuilder,
+    this.semanticLabel,
+    this.excludeFromSemantics = false,
+    this.color,
+    this.opacity,
+    this.colorBlendMode,
+    this.alignment = Alignment.center,
+    this.repeat = ImageRepeat.noRepeat,
+    this.centerSlice,
+    this.matchTextDirection = false,
+    this.gaplessPlayback = false,
+    this.isAntiAlias = false,
+    this.filterQuality = FilterQuality.low,
   }) : super(key: key);
 
   final ImageProvider image;
@@ -60,6 +72,30 @@ class EImage extends StatelessWidget {
 
   /// errorWidget
   final Widget? errorWidget;
+  final String? semanticLabel;
+
+  /// Whether to exclude this image from semantics.
+  ///
+  /// Useful for images which do not contribute meaningful information to an
+  /// application.
+  final bool excludeFromSemantics;
+
+  /// Whether to paint the image with anti-aliasing.
+  ///
+  /// Anti-aliasing alleviates the sawtooth artifact when the image is rotated.
+  final bool isAntiAlias;
+  final AlignmentGeometry alignment;
+
+  /// How to paint any portions of the layout bounds not covered by the image.
+  final ImageRepeat repeat;
+  final bool matchTextDirection;
+  final Rect? centerSlice;
+  final Color? color;
+  final bool gaplessPlayback;
+  final Animation<double>? opacity;
+  final FilterQuality filterQuality;
+  final BlendMode? colorBlendMode;
+  final ImageFrameBuilder? frameBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -74,30 +110,43 @@ class EImage extends StatelessWidget {
             return child;
           }
           return placeholderWidget ??
-              eleTheme.imageThemeData?.placeholderWidget ??
+              eleTheme.imageStyle?.placeholderWidget ??
               child;
         };
 
     var _errorBuilder = errorBuilder ??
         (BuildContext context, Object error, StackTrace? stackTrace) {
-          return errorWidget ??
-              eleTheme.imageThemeData?.errorWidget ??
-              Container();
+          return errorWidget ?? eleTheme.imageStyle?.errorWidget ?? Container();
         };
+    var child = Image(
+      key: key,
+      image: image,
+      fit: fit,
+      width: width,
+      height: height,
+      loadingBuilder: _loadingBuilder,
+      errorBuilder: _errorBuilder,
+      frameBuilder: frameBuilder,
+      semanticLabel: semanticLabel,
+      excludeFromSemantics: excludeFromSemantics,
+      color: color,
+      opacity: opacity,
+      colorBlendMode: colorBlendMode,
+      alignment: alignment,
+      repeat: repeat,
+      centerSlice: centerSlice,
+      matchTextDirection: matchTextDirection,
+      gaplessPlayback: gaplessPlayback,
+      isAntiAlias: isAntiAlias,
+      filterQuality: filterQuality,
+    );
 
     return ClipPath(
       clipper: _clipper,
       child: CustomPaint(
         foregroundPainter: _BorderPainter(
             clipper: _clipper, strokeWidth: borderWidth, color: _borderColor),
-        child: Image(
-          image: image,
-          fit: fit,
-          width: width,
-          height: height,
-          loadingBuilder: _loadingBuilder,
-          errorBuilder: _errorBuilder,
-        ),
+        child: child,
       ),
     );
   }
@@ -195,6 +244,9 @@ class _BorderPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    if (strokeWidth <= 0) {
+      return;
+    }
     final paint = Paint()
       ..color = color
       ..strokeWidth = strokeWidth

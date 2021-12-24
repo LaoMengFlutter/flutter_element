@@ -6,6 +6,12 @@ import 'theme/theme.dart';
 import 'theme/theme_data.dart';
 import 'package:flutter/material.dart';
 
+const double _kStrokeWidth = 1;
+const double _kDashGap = 3;
+const double _kDashWidth = 3;
+const EdgeInsetsGeometry _kPadding =
+    EdgeInsets.symmetric(vertical: 6.0, horizontal: 12);
+
 class EBorder extends StatelessWidget {
   /// 线的类型
   final BorderType type;
@@ -48,13 +54,15 @@ class EBorder extends StatelessWidget {
     final EleThemeData eleTheme = EleTheme.of(context);
     var _style = eleTheme.borderStyle?.merge(style) ?? style;
 
-    final Color color = _style?.color ?? Theme.of(context).primaryColor;
+    final Color color =
+        _style?.color ?? eleTheme.borderColorBase ?? Colors.transparent;
 
-    final double strokeWidth = _style?.strokeWidth ?? 1.0;
-    final BorderRadius radius = _style?.radius ?? BorderRadius.circular(3.0);
+    final double strokeWidth = _style?.strokeWidth ?? _kStrokeWidth;
+    final BorderRadius radius = _style?.radius ??
+        BorderRadius.circular(eleTheme.borderRadiusBase ?? 0.0);
 
-    final double dashWidth = _style?.dashWidth ?? 3.0;
-    final double dashGap = _style?.dashGap ?? 3.0;
+    final double dashWidth = _style?.dashWidth ?? _kDashWidth;
+    final double dashGap = _style?.dashGap ?? _kDashGap;
 
     var painter = type == BorderType.solid
         ? _SolidPainter(
@@ -78,7 +86,7 @@ class EBorder extends StatelessWidget {
       return CustomPaint(
         painter: painter,
         child: Container(
-          padding: _style?.padding,
+          padding: _style?.padding ?? _kPadding,
           alignment: alignment,
           child: child,
         ),
@@ -87,7 +95,7 @@ class EBorder extends StatelessWidget {
     return CustomPaint(
       painter: painter,
       child: Container(
-        padding: _style?.padding,
+        padding: _style?.padding ?? _kPadding,
         child: child,
       ),
     );
@@ -129,6 +137,7 @@ abstract class _BasePainter extends CustomPainter {
   }
 
   Path getPath(Size size) {
+    double offset = strokeWidth / 2.0;
     Path _path = Path();
     switch (shape) {
       // case BorderShape.line:
@@ -141,16 +150,19 @@ abstract class _BasePainter extends CustomPainter {
       //   }
       //   break;
       case BorderShape.rect:
-        _path.addRect(Rect.fromLTWH(0, 0, size.width, size.height));
+        _path.addRect(Rect.fromLTWH(
+            0 + offset, 0 + offset, size.width - offset, size.height - offset));
         break;
       case BorderShape.circle:
         _path.addOval(Rect.fromCircle(
-            center: Offset(size.width / 2, size.height / 2),
-            radius: min(size.width, size.height) / 2));
+          center: Offset(size.width / 2, size.height / 2),
+          radius: (min(size.width, size.height) / 2) - offset,
+        ));
         break;
       case BorderShape.rrect:
         _path.addRRect(RRect.fromRectAndCorners(
-          Rect.fromLTWH(0, 0, size.width, size.height),
+          Rect.fromLTWH(0 + offset, 0 + offset, size.width - offset,
+              size.height - offset),
           topLeft: radius.topLeft,
           topRight: radius.topRight,
           bottomLeft: radius.bottomLeft,
@@ -159,7 +171,8 @@ abstract class _BasePainter extends CustomPainter {
         break;
       case BorderShape.round:
         _path.addRRect(RRect.fromRectAndRadius(
-            Rect.fromLTWH(0, 0, size.width, size.height),
+            Rect.fromLTWH(0 + offset, 0 + offset, size.width - offset,
+                size.height - offset),
             Radius.circular(max(size.width, size.height) / 2)));
         break;
     }
@@ -218,6 +231,7 @@ class _DashedPainter extends _BasePainter {
         }
         distance += len;
         draw = !draw;
+        index++;
       }
     }
     return dest;

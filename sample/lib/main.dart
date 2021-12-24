@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_element/widgets.dart';
+import 'package:element_ui/widgets.dart';
+import 'package:sample/ui/navigator_list.dart';
 
 import 'ui/page/widget_list.dart';
 
@@ -18,15 +19,20 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.blue),
       home: EleTheme(
         data: EleThemeData(
-          imageThemeData: EleImageThemeData(
+          imageStyle: EImageStyle(
               errorWidget: Container(
-                color: Colors.red,
+                color: Colors.grey.withOpacity(.3),
+                alignment: Alignment.center,
+                child: Text(
+                  '加载失败',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
               placeholderWidget: Container(
-                color: Colors.blue,
+                color: Colors.grey.withOpacity(.3),
               )),
         ),
-        child: WidgetList(),
+        child: NavigatorList(),
       ),
     );
   }

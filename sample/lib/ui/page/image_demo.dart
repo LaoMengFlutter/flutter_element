@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flutter_element/widgets.dart';
+import 'package:element_ui/widgets.dart';
 
 import 'package:flutter/material.dart';
 
@@ -13,105 +13,74 @@ class ImageDemo extends StatelessWidget {
       appBar: AppBar(),
       body: SingleChildScrollView(
         child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Wrap(
-              spacing: 6,
-              runSpacing: 6,
+            padding: const EdgeInsets.all(18.0),
+            child: Column(
               children: [
                 Container(
-                  width: 150,
-                  height: 150,
+                  width: 200,
                   child: EImage(
-                    image: NetworkImage(
-                        'https://avatars0.githubusercontent.com/u/8264639?s=460&v=4'),
+                    image: AssetImage('assets/images/img_demo.jpeg'),
                   ),
                 ),
+                SizedBox(height: 12),
                 Container(
-                  width: 150,
-                  height: 150,
+                  width: 200,
                   child: EImage(
-                    image: NetworkImage(
-                        'https://avatars0.githubusercontent.com/u/8264639?s=460&v=4'),
-                    radius: BorderRadius.vertical(top: Radius.circular(12)),
-                  ),
-                ),
-                Container(
-                  width: 150,
-                  height: 150,
-                  child: EImage(
-                    image: NetworkImage(
-                        'https://avatars0.githubusercontent.com/u/8264639?s=460&v=4'),
+                    image: AssetImage('assets/images/img_demo.jpeg'),
                     radius: BorderRadius.all(Radius.circular(12)),
                   ),
                 ),
+                SizedBox(height: 12),
+                Container(
+                  width: 200,
+                  child: EImage(
+                    image: AssetImage('assets/images/img_demo.jpeg'),
+                    radius: BorderRadius.vertical(top: Radius.circular(12)),
+                  ),
+                ),
+                SizedBox(height: 12),
+                Container(
+                  width: 200,
+                  child: EImage(
+                    image: AssetImage('assets/images/img_demo.jpeg'),
+                    shape: ImageShape.circle,
+                  ),
+                ),
+                SizedBox(height: 12),
+                Container(
+                  width: 200,
+                  child: EImage(
+                    image: AssetImage('assets/images/img_demo.jpeg'),
+                    borderWidth: 3,
+                    borderColor: Colors.red,
+                  ),
+                ),
+                SizedBox(height: 12),
+                Container(
+                  width: 200,
+                  child: EImage(
+                    image: AssetImage('assets/images/img_demo.jpeg'),
+                    clipper: StarPath(),
+                  ),
+                ),
+                SizedBox(height: 12),
+                Container(
+                  width: 200,
+                  child: EImage(
+                    image: AssetImage('assets/images/img_demo.jpeg'),
+                    borderWidth: 3,
+                    borderColor: Colors.red,
+                    clipper: StarPath(),
+                  ),
+                ),
+                SizedBox(height: 12),
                 Container(
                   width: 200,
                   height: 150,
                   child: EImage(
                     image: NetworkImage(
-                        'https://avatars0.githubusercontent.com/u/8264639?s=460&v=4'),
-                    shape: ImageShape.circle,
-                  ),
-                ),
-                Container(
-                  width: 150,
-                  height: 150,
-                  child: EImage(
-                    image: NetworkImage(
-                        'https://avatars0.githubusercontent.com/u/8264639?s=460&v=4'),
-                    radius: BorderRadius.all(Radius.circular(12)),
-                    borderWidth: 3,
-                    borderColor: Colors.red,
-                  ),
-                ),
-                Container(
-                  width: 150,
-                  height: 150,
-                  child: EImage(
-                    image: NetworkImage(
-                        'https://avatars0.githubusercontent.com/u/8264639?s=460&v=4'),
-                    shape: ImageShape.circle,
-                    borderWidth: 3,
-                  ),
-                ),
-                Container(
-                  width: 150,
-                  height: 150,
-                  child: EImage(
-                    image: NetworkImage(
-                        'https://avatars0.githubusercontent.com/u/8264639?s=460&v=4'),
-                    radius: BorderRadius.all(Radius.circular(12)),
-                    clipper: StarPath(),
-                  ),
-                ),
-                Container(
-                  width: 150,
-                  height: 150,
-                  child: EImage(
-                    image: NetworkImage(
-                        'https://avatars0.githubusercontent.com/u/8264639?s=460&v=4'),
-                    shape: ImageShape.circle,
-                    borderWidth: 3,
-                    borderColor: Colors.red,
-                    clipper: StarPath(),
-                  ),
-                ),
-                Container(
-                  width: 150,
-                  height: 150,
-                  child: EImage(
-                    image: NetworkImage(
-                        'http://pic1.win4000.com/wallpaper/2018-06-02/5b1204212b018.jpg'),
-                  ),
-                ),
-                Container(
-                  width: 150,
-                  height: 150,
-                  child: EImage(
-                    image: NetworkImage(
                         'http://pic1.win4000.com/wallpaper/2018-06-02/5b1204212b018.jpg'),
                     loadingBuilder: (context, child, progress) {
-                      print('progress:$progress');
                       if (progress == null) {
                         return child;
                       }
@@ -123,26 +92,24 @@ class ImageDemo extends StatelessWidget {
                   width: 150,
                   height: 150,
                   child: EImage(
-                    radius: BorderRadius.all(Radius.circular(20)),
-                    image: NetworkImage(
-                        'https://avatars0.githubusercontent.com/u/8264639fda'),
+                    image: AssetImage('assets/images/img_demo1.jpeg'),
                     errorWidget: Container(
-                      color: Colors.grey,
+                      color: Colors.grey.withOpacity(.3),
                       alignment: Alignment.center,
                       child: Text(
-                        'error',
+                        '加载失败',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
                 ),
                 Container(
-                  width: 150,
+                  width: 200,
                   height: 150,
                   child: EImage(
                     radius: BorderRadius.all(Radius.circular(20)),
                     image: NetworkImage(
-                        'https://avatars0.githubusercontent.com/u/8264639fda'),
+                        'http://pic1.win4000.com/wallpaper/2018-06-02/5b1204212b018.jpg'),
                   ),
                 ),
               ],

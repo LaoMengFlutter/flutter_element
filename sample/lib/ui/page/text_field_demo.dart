@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_element/widgets.dart';
+import 'package:element_ui/widgets.dart';
 
 class TextFieldDemo extends StatefulWidget {
   const TextFieldDemo({Key? key}) : super(key: key);
@@ -32,7 +32,9 @@ class _TextFieldDemoState extends State<TextFieldDemo> {
               ),
               SizedBox(height: 12),
               ETextField(
-                value: 'Flutter Element',
+                value: 'Flutter Element1',
+                height: 30,
+                textStyle: TextStyle(fontSize: 15),
               ),
               SizedBox(height: 12),
               ETextField(

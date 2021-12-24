@@ -5,6 +5,8 @@ import 'theme/theme_data.dart';
 
 typedef LabelWidgetBuilder = Widget Function(double value);
 
+const Color _kActiveColor = Colors.amber;
+
 class ERate extends StatefulWidget {
   final double value;
   final ERateStyle? style;
@@ -65,6 +67,12 @@ class _ERateState extends State<ERate> {
   Widget build(BuildContext context) {
     EleThemeData eleTheme = EleTheme.of(context);
     var _style = eleTheme.rateStyle?.merge(widget.style) ?? widget.style;
+
+    Color activeColor = _style?.activeColor ?? _kActiveColor;
+    Color inactiveColor = _style?.inactiveColor ??
+        eleTheme.borderColorLighter ??
+        Colors.transparent;
+
     List<Widget> children = [];
     List.generate(widget.count, (index) {
       var child = widget.itemBuilder?.call(context, index) ??
@@ -72,22 +80,12 @@ class _ERateState extends State<ERate> {
           _getItemByIconType(widget.iconType, index, _value);
 
       if (index < _value.floor()) {
-        children.add(_buildItem(index,
-            _style?.activeColor ?? Colors.transparent, widget.itemSize, child));
+        children.add(_buildItem(index, activeColor, widget.itemSize, child));
       } else if (index >= _value.floor() && index < _value.ceil()) {
-        children.add(_buildMixItem(
-            index,
-            _value - _value.floor(),
-            _style?.activeColor ?? Colors.transparent,
-            _style?.inactiveColor ?? Colors.transparent,
-            widget.itemSize,
-            child));
+        children.add(_buildMixItem(index, _value - _value.floor(), activeColor,
+            inactiveColor, widget.itemSize, child));
       } else {
-        children.add(_buildItem(
-            index,
-            _style?.inactiveColor ?? Colors.transparent,
-            widget.itemSize,
-            child));
+        children.add(_buildItem(index, inactiveColor, widget.itemSize, child));
       }
 
       if (index < widget.count - 1) {

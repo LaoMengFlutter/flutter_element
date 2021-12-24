@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_element/widgets.dart';
+import 'package:element_ui/widgets.dart';
 
 class RadioDemo extends StatelessWidget {
   const RadioDemo({Key? key}) : super(key: key);
@@ -13,16 +13,17 @@ class RadioDemo extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.all(12),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ERadioGroup(
               radios: [
                 ERadioItem(
                   value: '1',
-                  label: '备选项',
+                  label: '备选项1',
                 ),
                 ERadioItem(
                   value: '2',
-                  label: '备选项',
+                  label: '备选项2',
                 ),
               ],
             ),
@@ -62,15 +63,7 @@ class RadioDemo extends StatelessWidget {
                 ERadioItem(
                   value: '3',
                   label: '备选项3',
-                ),
-                ERadioItem(
-                  value: '4',
-                  label: '备选项4',
-                ),
-                ERadioItem(
-                  value: '5',
-                  label: '备选项5',
-                ),
+                )
               ],
             ),
             SizedBox(
@@ -78,7 +71,6 @@ class RadioDemo extends StatelessWidget {
             ),
             Container(
               child: ERadioButtonGroup(
-                selectValue: '2',
                 style: ERadioStyle(
                     padding:
                         EdgeInsets.symmetric(horizontal: 24, vertical: 12)),
@@ -101,6 +93,65 @@ class RadioDemo extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            ERadioGroup(
+              style: ERadioStyle(
+                  fontColor: Colors.black, checkedFontColor: Colors.red),
+              radios: [
+                ERadioItem(
+                  value: '1',
+                  label: '备选项1',
+                ),
+                ERadioItem(
+                  value: '2',
+                  label: '备选项2',
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            ERadioGroup(
+              style: ERadioStyle(
+                  backgroundColor: Colors.grey.withOpacity(.5),
+                  checkedBackgroundColor: Colors.red,
+                  checkedFontColor: Colors.blue),
+              radios: [
+                ERadioItem(
+                  value: '1',
+                  label: '备选项1',
+                ),
+                ERadioItem(
+                  value: '2',
+                  label: '备选项2',
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            ERadioGroup(
+              style: ERadioStyle(
+                  borderColor: Colors.grey.withOpacity(.3),
+                  checkedBorderColor: Colors.red,
+                  borderRadius: BorderRadius.all(Radius.circular(3))),
+              border: true,
+              radios: [
+                ERadioItem(
+                  value: '1',
+                  label: '备选项1',
+                ),
+                ERadioItem(
+                  value: '2',
+                  label: '备选项2',
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 12,
             ),
           ],
         ),

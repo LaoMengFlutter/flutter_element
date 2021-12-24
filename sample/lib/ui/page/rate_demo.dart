@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_element/widgets.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:element_ui/widgets.dart';
 
 class RateDemo extends StatefulWidget {
   const RateDemo({Key? key}) : super(key: key);

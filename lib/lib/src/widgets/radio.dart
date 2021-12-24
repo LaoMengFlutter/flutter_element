@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'border.dart';
+import 'theme/border_style.dart';
 import 'theme/radio_style.dart';
 import 'theme/theme.dart';
 import 'theme/theme_data.dart';
+
+const double _kSpace = 3.0;
 
 class ERadioItem<T> {
   final T value;
@@ -168,17 +172,28 @@ class _ERadioButtonGroupState<T extends Object>
           element.value,
           () => Padding(
                 padding: _style?.padding ?? EdgeInsets.zero,
-                child: Text('${element.label}'),
+                child: Text(
+                  '${element.label}',
+                  style: TextStyle(
+                      color: element.value == _selectValue
+                          ? _style?.checkedFontColor ??
+                              EleTheme.of(context).backgroundColorWhite
+                          : _style?.fontColor ??
+                              EleTheme.of(context).regularTextColor),
+                ),
               ));
     }
 
     return CupertinoSegmentedControl<T>(
       groupValue: _selectValue,
       children: _children,
-      selectedColor: _style?.checkedFontColor,
-      unselectedColor: _style?.backgroundColor,
-      borderColor: _style?.borderColor,
+      selectedColor:
+          _style?.checkedBackgroundColor ?? EleTheme.of(context).primaryColor,
+      unselectedColor:
+          _style?.backgroundColor ?? EleTheme.of(context).backgroundColorWhite,
+      borderColor: _style?.borderColor ?? EleTheme.of(context).borderColorBase,
       onValueChanged: _onChanged,
+      padding: EdgeInsets.zero,
     );
   }
 }
@@ -205,42 +220,54 @@ class _ERadio<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color:
-              checked ? style?.checkedBackgroundColor : style?.backgroundColor,
-          border: border
-              ? Border.all(
-                  color: (checked
-                          ? style?.checkedBorderColor
-                          : style?.borderColor) ??
-                      Colors.transparent,
-                )
-              : null,
-          borderRadius: style?.borderRadius),
-      padding: style?.padding,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Radio(
-            value: value,
-            onChanged: enable ? onChanged : null,
-            groupValue: checked ? value : null,
-            visualDensity: const VisualDensity(
-                horizontal: VisualDensity.minimumDensity,
-                vertical: VisualDensity.minimumDensity),
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          ),
-          SizedBox(width: style?.space),
-          if (label != null)
-            Text(
-              '$label',
-              style: TextStyle(
-                color: checked ? style?.checkedFontColor : style?.fontColor,
-              ),
+    var child = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Radio(
+          value: value,
+          onChanged: enable ? onChanged : null,
+          groupValue: checked ? value : null,
+          visualDensity: const VisualDensity(
+              horizontal: VisualDensity.minimumDensity,
+              vertical: VisualDensity.minimumDensity),
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          fillColor: MaterialStateProperty.resolveWith((states) {
+            if (states.contains(MaterialState.selected)) {
+              return EleTheme.of(context).primaryColor;
+            }
+            return EleTheme.of(context).borderColorBase;
+          }),
+        ),
+        SizedBox(width: style?.space ?? _kSpace),
+        if (label != null)
+          Text(
+            '$label',
+            style: TextStyle(
+              color: checked
+                  ? style?.checkedFontColor ?? EleTheme.of(context).primaryColor
+                  : style?.fontColor ?? EleTheme.of(context).regularTextColor,
             ),
-        ],
-      ),
+          ),
+      ],
     );
+    if (border) {
+      return Container(
+        color: checked ? style?.checkedBackgroundColor : style?.backgroundColor,
+        child: EBorder(
+          mainAxisSize: MainAxisSize.min,
+          style: EBorderStyle(
+            color: checked
+                ? style?.checkedBorderColor ?? EleTheme.of(context).primaryColor
+                : style?.borderColor,
+            radius: style?.borderRadius ??
+                BorderRadius.circular(
+                    EleTheme.of(context).borderRadiusBase ?? 4.0),
+            padding: style?.padding,
+          ),
+          child: child,
+        ),
+      );
+    }
+    return child;
   }
 }

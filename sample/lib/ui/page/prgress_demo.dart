@@ -1,4 +1,4 @@
-import 'package:flutter_element/widgets.dart';
+import 'package:element_ui/widgets.dart';
 
 import 'package:flutter/material.dart';
 
@@ -12,7 +12,7 @@ class ProgressDemo extends StatefulWidget {
 class _ProgressDemoState extends State<ProgressDemo>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<int> _animation;
+  late Animation<double> _animation;
 
   @override
   void initState() {
@@ -20,7 +20,7 @@ class _ProgressDemoState extends State<ProgressDemo>
     _controller =
         AnimationController(vsync: this, duration: Duration(seconds: 5));
 
-    _animation = IntTween(begin: 0, end: 100).animate(_controller);
+    _animation = Tween(begin: 0.0, end: 1.0).animate(_controller);
   }
 
   @override
@@ -58,7 +58,6 @@ class _ProgressDemoState extends State<ProgressDemo>
                         child: EProgress(
                           progress: _animation.value,
                           strokeWidth: 20,
-                          status: EleThemeStatus.success,
                         ),
                       ),
                       SizedBox(height: 12),
@@ -118,9 +117,8 @@ class _ProgressDemoState extends State<ProgressDemo>
                           strokeWidth: 20,
                           strokeCap: StrokeCap.round,
                           format: (progress) {
-                            return '自定义：$progress%';
+                            return '自定义：${(progress * 100).toStringAsFixed(0)}%';
                           },
-                          status: EleThemeStatus.success,
                         ),
                       ),
                       SizedBox(height: 12),

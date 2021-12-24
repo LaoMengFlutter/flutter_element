@@ -13,6 +13,7 @@ class ECheckbox extends StatefulWidget {
   final ECheckboxStyle? style;
   final ValueChanged<bool?>? onChanged;
   final bool enable;
+  final OutlinedBorder? shape;
 
   const ECheckbox({
     Key? key,
@@ -23,6 +24,7 @@ class ECheckbox extends StatefulWidget {
     this.border = false,
     this.style,
     this.enable = true,
+    this.shape,
   }) : super(key: key);
 
   @override
@@ -61,7 +63,7 @@ class _ECheckboxState extends State<ECheckbox> {
     EleThemeData eleTheme = EleTheme.of(context);
     var style = eleTheme.checkboxStyle?.merge(widget.style) ?? widget.style;
 
-    var child = Row(
+    Widget child = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Checkbox(
@@ -71,6 +73,13 @@ class _ECheckboxState extends State<ECheckbox> {
           visualDensity: const VisualDensity(
               horizontal: VisualDensity.minimumDensity,
               vertical: VisualDensity.minimumDensity),
+          shape: widget.shape,
+          fillColor: MaterialStateProperty.resolveWith((states) {
+            if (states.contains(MaterialState.selected)) {
+              return EleTheme.of(context).primaryColor;
+            }
+            return EleTheme.of(context).borderColorBase;
+          }),
         ),
         SizedBox(width: style?.space),
         if (widget.label != null)
@@ -78,8 +87,8 @@ class _ECheckboxState extends State<ECheckbox> {
             '${widget.label}',
             style: TextStyle(
               color: (_value ?? false)
-                  ? style?.checkedFontColor
-                  : style?.fontColor,
+                  ? style?.checkedFontColor ?? EleTheme.of(context).primaryColor
+                  : style?.fontColor ?? EleTheme.of(context).regularTextColor,
             ),
           ),
       ],
@@ -93,16 +102,17 @@ class _ECheckboxState extends State<ECheckbox> {
           mainAxisSize: MainAxisSize.min,
           style: EBorderStyle(
             color: (_value ?? false)
-                ? style?.checkedBorderColor
+                ? style?.checkedBorderColor ?? EleTheme.of(context).primaryColor
                 : style?.borderColor,
             radius: style?.borderRadius,
+            padding: style?.padding,
           ),
           child: child,
         ),
       );
     }
     return Container(
-      padding: style?.padding,
+      padding: widget.border ? style?.padding : EdgeInsets.zero,
       color: (_value ?? false)
           ? style?.checkedBackgroundColor
           : style?.backgroundColor,

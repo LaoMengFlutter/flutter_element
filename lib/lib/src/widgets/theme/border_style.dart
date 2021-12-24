@@ -15,7 +15,7 @@ class EBorderStyle with Diagnosticable {
   final double? dashWidth;
 
   /// 虚线处宽
-  final EdgeInsets? padding;
+  final EdgeInsetsGeometry? padding;
 
   /// 圆角
   final BorderRadius? radius;

@@ -86,13 +86,16 @@ class _ESliderState extends State<ESlider> {
     if (widget.range) {
       return SliderTheme(
         data: SliderTheme.of(context).copyWith(
-          activeTrackColor: _style?.activeColor,
-          thumbColor: _style?.thumbColor,
+          activeTrackColor:
+              _style?.activeColor ?? EleTheme.of(context).primaryColor,
+          thumbColor:
+              _style?.thumbColor ?? EleTheme.of(context).backgroundColorWhite,
         ),
         child: RangeSlider(
           values: _rangeValues,
           onChanged: widget.enable ? _onRangeChanged : null,
-          inactiveColor: _style?.inactiveColor,
+          inactiveColor:
+              _style?.inactiveColor ?? EleTheme.of(context).borderColorLight,
           labels: widget.rangeLabels ??
               RangeLabels('${_rangeValues.start}', '${_rangeValues.end}'),
           divisions: widget.divisions,
@@ -105,9 +108,11 @@ class _ESliderState extends State<ESlider> {
     return Slider(
       value: _value,
       onChanged: widget.enable ? _onChanged : null,
-      activeColor: _style?.activeColor,
-      inactiveColor: _style?.inactiveColor,
-      thumbColor: _style?.thumbColor,
+      activeColor: _style?.activeColor ?? EleTheme.of(context).primaryColor,
+      inactiveColor:
+          _style?.inactiveColor ?? EleTheme.of(context).borderColorLight,
+      thumbColor:
+          _style?.thumbColor ?? EleTheme.of(context).backgroundColorWhite,
       label: widget.label ?? '$_value',
       divisions: widget.divisions,
       min: widget.min,

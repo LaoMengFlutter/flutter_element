@@ -1,182 +1,169 @@
 import 'dart:math';
 
-import 'theme/button_theme_data.dart';
 import 'theme/theme.dart';
-import 'theme/theme_data.dart';
 import 'package:flutter/material.dart';
-
-import 'theme/theme_status.dart';
 
 class EButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final Widget child;
-  final EleButtonThemeData? style;
+  final ButtonStyle? style;
+  final Color? loadingColor;
+
+  /// radius
+  final BorderRadius? radius;
   final bool loading;
 
-  /// disable opacity
-  static const double _disableOpacity = .7;
+  /// type
+  final EButtonBorderStyle borderStyle;
+
+  /// shape
+  final BoxShape shape;
+  final List<Color>? gradientColors;
+  final AlignmentGeometry gradientBegin;
+  final AlignmentGeometry gradientEnd;
+  final List<double>? gradientStops;
 
   const EButton({
     Key? key,
     this.onPressed,
     required this.child,
     this.style,
+    this.shape = BoxShape.rectangle,
+    this.borderStyle = EButtonBorderStyle.fill,
     this.loading = false,
+    this.loadingColor,
+    this.radius,
+    this.gradientColors,
+    this.gradientBegin = Alignment.centerLeft,
+    this.gradientEnd = Alignment.centerRight,
+    this.gradientStops,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final EleThemeData eleTheme = EleTheme.of(context);
-
-    Color primaryColor =
-        eleTheme.primaryColor ?? Theme.of(context).primaryColor;
-
-    var status = style?.status ?? eleTheme.buttonThemeData?.status;
-    var plain = style?.plain ?? eleTheme.buttonThemeData?.plain ?? false;
-    var enable = onPressed == null || loading;
-
-    ButtonBorderStyle borderStyle = style?.borderStyle ??
-        eleTheme.buttonThemeData?.borderStyle ??
-        getTypeByStatus(status, plain);
-
-    var textStyle =
-        MaterialStateProperty.all(eleTheme.buttonThemeData?.textStyle);
-
-    var foregroundColor = style?.foregroundColor ??
-        eleTheme.buttonThemeData?.foregroundColor ??
-        getForegroundColorByStatus(status, eleTheme, plain) ??
-        primaryColor;
-    if (enable) {
-      var opacity = foregroundColor.opacity;
-      foregroundColor = foregroundColor.withOpacity(opacity * _disableOpacity);
+    var _child = child;
+    if (loading) {
+      _child = Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _Indicator(
+            radius: 8,
+            color: loadingColor ?? EleTheme.of(context).backgroundColorWhite??Colors.white,
+          ),
+          const SizedBox(width: 8),
+          _child
+        ],
+      );
     }
-    var foreground = MaterialStateProperty.all(foregroundColor);
-
-    var backgroundColor = borderStyle == ButtonBorderStyle.fill
-        ? (style?.backgroundColor ??
-            eleTheme.buttonThemeData?.backgroundColor ??
-            getBackgroundColorByStatus(status, eleTheme, plain) ??
-            primaryColor)
-        : null;
-    if (enable) {
-      var opacity = backgroundColor?.opacity ?? 1.0;
-      backgroundColor = backgroundColor?.withOpacity(opacity * _disableOpacity);
+    if (gradientColors != null) {
+      _child = ClipRRect(
+        borderRadius: radius ??
+            BorderRadius.circular(EleTheme.of(context).borderRadiusBase ?? 4.0),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: gradientBegin,
+              end: gradientEnd,
+              colors: gradientColors!,
+              stops: gradientStops,
+            ),
+            shape: shape,
+          ),
+          padding: style?.padding?.resolve({
+                MaterialState.hovered,
+                MaterialState.pressed,
+                MaterialState.focused,
+                MaterialState.dragged,
+                MaterialState.selected,
+                MaterialState.scrolledUnder,
+                MaterialState.disabled,
+                MaterialState.error,
+              }) ??
+              const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+          child: _child,
+        ),
+      );
     }
-    var background = borderStyle == ButtonBorderStyle.fill
-        ? MaterialStateProperty.all(backgroundColor)
-        : null;
-
-    var overlayColor = MaterialStateProperty.all(
-        style?.overlayColor ?? eleTheme.buttonThemeData?.overlayColor);
-
-    var padding = MaterialStateProperty.all(style?.padding ??
-        eleTheme.buttonThemeData?.padding ??
-        const EdgeInsets.symmetric(horizontal: 16, vertical: 8));
-
-    var shape =
-        style?.shape ?? eleTheme.buttonThemeData?.shape ?? ButtonShape.rrect;
-    var radius = eleTheme.buttonThemeData?.radius ?? 3.0;
-
-    var borderColor = style?.borderColor ??
-        eleTheme.buttonThemeData?.borderColor ??
-        getBorderColorByStatus(status, eleTheme, plain);
-
-    if (enable) {
-      var opacity = borderColor?.opacity ?? 1.0;
-      borderColor = borderColor?.withOpacity(opacity * _disableOpacity);
-    }
-
-    var side = borderColor != null && borderStyle != ButtonBorderStyle.none
-        ? MaterialStateProperty.all(
-            BorderSide(color: borderColor.withOpacity(.3)))
-        : null;
 
     return OutlinedButton(
       onPressed: loading ? null : onPressed,
       style: ButtonStyle(
-        textStyle: textStyle,
-        foregroundColor: foreground,
-        backgroundColor: background,
-        overlayColor: overlayColor,
-        padding: padding,
-        shape: getOutlinedBorder(shape, radius),
-        side: side,
-        minimumSize: MaterialStateProperty.all(Size.zero),
+        textStyle: style?.textStyle,
+        foregroundColor: style?.foregroundColor ??
+            MaterialStateProperty.resolveWith((states) {
+              if (borderStyle == EButtonBorderStyle.fill) {
+                return EleTheme.of(context).backgroundColorWhite;
+              } else {
+                if (states.contains(MaterialState.focused) ||
+                    states.contains(MaterialState.pressed) ||
+                    states.contains(MaterialState.hovered)) {
+                  return EleTheme.of(context).primaryColor;
+                }
+                return EleTheme.of(context).regularTextColor;
+              }
+            }),
+        backgroundColor: style?.backgroundColor ??
+            MaterialStateProperty.resolveWith((states) {
+              if (borderStyle == EButtonBorderStyle.fill) {
+                return EleTheme.of(context).primaryColor;
+              }
+              return EleTheme.of(context).backgroundColorWhite;
+            }),
+        side: style?.side ??
+            MaterialStateProperty.resolveWith((states) {
+              if (borderStyle == EButtonBorderStyle.stroke) {
+                return BorderSide(
+                    color: EleTheme.of(context).borderColorBase ??
+                        Colors.transparent);
+              }
+              if (borderStyle == EButtonBorderStyle.none) {
+                return const BorderSide(color: Colors.transparent);
+              }
+              return null;
+            }),
+        overlayColor: style?.overlayColor ??
+            MaterialStateProperty.resolveWith((states) {
+              if (borderStyle == EButtonBorderStyle.none) {
+                return Colors.transparent;
+              }
+            }),
+        padding: gradientColors == null
+            ? style?.padding
+            : MaterialStateProperty.all(EdgeInsets.zero),
+        shadowColor: style?.shadowColor,
+        elevation: style?.elevation,
+        shape: style?.shape ??
+            getOutlinedBorder(
+                shape,
+                radius ??
+                    BorderRadius.circular(
+                        EleTheme.of(context).borderRadiusBase ?? 4.0)),
+        minimumSize: gradientColors == null
+            ? style?.minimumSize
+            : MaterialStateProperty.all(Size.zero),
+        fixedSize: style?.fixedSize,
+        maximumSize: style?.maximumSize,
+        mouseCursor: style?.mouseCursor,
+        visualDensity: style?.visualDensity,
+        tapTargetSize: style?.tapTargetSize,
+        animationDuration: style?.animationDuration,
+        enableFeedback: style?.enableFeedback,
+        alignment: style?.alignment,
+        splashFactory: style?.splashFactory,
       ),
-      child: loading
-          ? Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _Indicator(
-                  radius: 8,
-                  color: foregroundColor,
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                child
-              ],
-            )
-          : child,
+      child: _child,
     );
   }
 
-  Color? getForegroundColorByStatus(
-      EleThemeStatus? status, EleThemeData eleTheme, bool plain) {
-    if (status == null) {
-      return eleTheme.primaryTextColor;
-    }
-    if (plain) {
-      return status.color(eleTheme);
-    }
-    return Colors.white;
-  }
-
-  Color? getBorderColorByStatus(
-      EleThemeStatus? status, EleThemeData eleTheme, bool plain) {
-    if (status == null || !plain) {
-      return null;
-    }
-    return status.color(eleTheme);
-  }
-
-  ButtonBorderStyle getTypeByStatus(EleThemeStatus? type, bool plain) {
-    if (plain) {
-      return ButtonBorderStyle.fill;
-    }
-    if (type == null) {
-      return ButtonBorderStyle.stroke;
-    }
-    return ButtonBorderStyle.fill;
-  }
-
-  Color? getBackgroundColorByStatus(
-      EleThemeStatus? status, EleThemeData eleTheme, bool plain) {
-    if (status == null) {
-      return Colors.transparent;
-    }
-    Color? color = status.color(eleTheme);
-    if (plain) {
-      color = color?.withOpacity(.1);
-    }
-    return color;
-  }
-
   MaterialStateProperty<OutlinedBorder?>? getOutlinedBorder(
-      ButtonShape shape, double radius) {
+      BoxShape shape, BorderRadius borderRadius) {
     MaterialStateProperty<OutlinedBorder?>? border;
     switch (shape) {
-      case ButtonShape.round:
-        border = MaterialStateProperty.all(const StadiumBorder());
+      case BoxShape.rectangle:
+        border = MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: borderRadius));
         break;
-      case ButtonShape.rrect:
-        border = MaterialStateProperty.all(RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radius)));
-        break;
-      case ButtonShape.rect:
-        border = MaterialStateProperty.all(const RoundedRectangleBorder());
-        break;
-      case ButtonShape.circle:
+      case BoxShape.circle:
         border = MaterialStateProperty.all(const CircleBorder());
         break;
     }
@@ -276,4 +263,15 @@ class _IndicatorPainter extends CustomPainter {
   bool shouldRepaint(covariant _IndicatorPainter oldDelegate) {
     return oldDelegate.radius != radius || oldDelegate.color != color;
   }
+}
+
+enum EButtonBorderStyle {
+  /// none
+  none,
+
+  /// stroke
+  stroke,
+
+  /// fill
+  fill
 }

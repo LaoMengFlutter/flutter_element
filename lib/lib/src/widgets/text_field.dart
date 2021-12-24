@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,7 +15,6 @@ class ETextField extends StatefulWidget {
   final String? value;
   final String? placeholder;
   final ETextFieldStyle? style;
-  final TextEditingController? controller;
   final bool clear;
   final bool obscureText;
   final bool showPassword;
@@ -35,15 +37,49 @@ class ETextField extends StatefulWidget {
   final int? maxLength;
   final TextStyle? textStyle;
   final TextStyle? placeholderTextStyle;
-
   final WidgetLimitBuilder? limitBuilder;
+  final FocusNode? focusNode;
+  final StrutStyle? strutStyle;
+  final TextDirection? textDirection;
+  final bool? showCursor;
+  final bool autofocus;
+  final String obscuringCharacter;
+  final bool autocorrect;
+  final SmartDashesType? smartDashesType;
+  final SmartQuotesType? smartQuotesType;
+  final bool enableSuggestions;
+  final int? minLines;
+  final bool expands;
+  final MaxLengthEnforcement? maxLengthEnforcement;
+  final VoidCallback? onEditingComplete;
+  final AppPrivateCommandCallback? onAppPrivateCommand;
+  final double cursorWidth;
+  final double? cursorHeight;
+  final Radius? cursorRadius;
+  final Color? cursorColor;
+  final BoxHeightStyle selectionHeightStyle;
+  final BoxWidthStyle selectionWidthStyle;
+  final Brightness? keyboardAppearance;
+  final EdgeInsets scrollPadding;
+  final bool enableInteractiveSelection;
+  final TextSelectionControls? selectionControls;
+  final DragStartBehavior dragStartBehavior;
+  final GestureTapCallback? onTap;
+  final MouseCursor? mouseCursor;
+  final ScrollPhysics? scrollPhysics;
+  final ScrollController? scrollController;
+  final Iterable<String>? autofillHints;
+  final Clip clipBehavior;
+  final String? restorationId;
+  final bool enableIMEPersonalizedLearning;
+  final EdgeInsetsGeometry? contentPadding;
 
   const ETextField({
     Key? key,
     this.value,
+    this.focusNode,
     this.placeholder,
     this.style,
-    this.controller,
     this.clear = false,
     this.obscureText = false,
     this.showPassword = false,
@@ -65,6 +101,40 @@ class ETextField extends StatefulWidget {
     this.textStyle,
     this.placeholderTextStyle,
     this.limitBuilder,
+    this.strutStyle,
+    this.textDirection,
+    this.showCursor,
+    this.autofocus = false,
+    this.obscuringCharacter = '•',
+    this.autocorrect = true,
+    this.smartDashesType,
+    this.enableSuggestions = true,
+    this.expands = false,
+    this.minLines,
+    this.smartQuotesType,
+    this.mouseCursor,
+    this.onTap,
+    this.autofillHints,
+    this.clipBehavior = Clip.hardEdge,
+    this.cursorColor,
+    this.cursorHeight,
+    this.cursorRadius,
+    this.cursorWidth = 2.0,
+    this.dragStartBehavior = DragStartBehavior.start,
+    this.enableIMEPersonalizedLearning = true,
+    this.enableInteractiveSelection = true,
+    this.keyboardAppearance,
+    this.maxLengthEnforcement,
+    this.onAppPrivateCommand,
+    this.onEditingComplete,
+    this.restorationId,
+    this.scrollController,
+    this.scrollPadding = const EdgeInsets.all(20.0),
+    this.scrollPhysics,
+    this.selectionControls,
+    this.selectionHeightStyle = BoxHeightStyle.tight,
+    this.selectionWidthStyle = BoxWidthStyle.tight,
+    this.contentPadding,
   }) : super(key: key);
 
   @override
@@ -81,24 +151,29 @@ class _ETextFieldState extends State<ETextField> {
   @override
   initState() {
     _value = widget.value ?? '';
-    _controller = widget.controller ?? TextEditingController()
-      ..text = _value;
+    _controller = TextEditingController()..text = _value;
+    _controller.selection =
+        TextSelection.fromPosition(TextPosition(offset: _value.length));
     _wordLength = _value.length;
     _showPassword = false;
     super.initState();
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   void didUpdateWidget(covariant ETextField oldWidget) {
-    if (oldWidget.value != widget.value) {
-      _value = widget.value ?? '';
-    }
-    if (oldWidget.controller != widget.controller) {
-      _controller = widget.controller ?? TextEditingController();
-    }
-    _controller.text = _value;
+    // if (oldWidget.value != widget.value) {
+    _value = widget.value ?? '';
+    _controller = TextEditingController()..text = _value;
+    _controller.selection =
+        TextSelection.fromPosition(TextPosition(offset: _value.length));
     _wordLength = _value.length;
-    _showPassword = false;
+    // }
     super.didUpdateWidget(oldWidget);
   }
 
@@ -170,21 +245,26 @@ class _ETextFieldState extends State<ETextField> {
       _inputFormatters.add(LengthLimitingTextInputFormatter(widget.maxLength));
     }
 
-    var _textStyle = widget.textStyle ?? TextStyle(color: _style?.fontColor);
+    var _textStyle = widget.textStyle ??
+        TextStyle(color: _style?.fontColor ?? eleTheme.regularTextColor);
     var _placeholderTextStyle = widget.placeholderTextStyle ??
-        TextStyle(color: _style?.placeholderColor);
+        TextStyle(color: _style?.placeholderColor ?? eleTheme.placeholderColor);
     _getTextHeight(_textStyle);
     EdgeInsetsGeometry? contentPadding;
     if (widget.height != null) {
       if (widget.maxLines == null || widget.maxLines == 1) {
-        contentPadding = widget.height! > _textHeight
-            ? EdgeInsets.symmetric(
-                horizontal: 12, vertical: (widget.height! - _textHeight) / 2)
-            : const EdgeInsets.symmetric(horizontal: 12, vertical: 0);
+        contentPadding = widget.contentPadding ??
+            (widget.height! > _textHeight
+                ? EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: (widget.height! - _textHeight) / 2)
+                : const EdgeInsets.symmetric(horizontal: 12, vertical: 0));
       }
     }
     var textField = TextField(
+      key: widget.key,
       controller: _controller,
+      focusNode: widget.focusNode,
       obscureText: widget.obscureText && !_showPassword,
       maxLines: widget.maxLines,
       keyboardType: widget.keyboardType,
@@ -198,24 +278,63 @@ class _ETextFieldState extends State<ETextField> {
       enabled: widget.enabled,
       style: _textStyle,
       decoration: InputDecoration(
-        fillColor: _style?.backgroundColor,
+        fillColor: _style?.backgroundColor ?? eleTheme.backgroundColorWhite,
         filled: true,
         enabledBorder: OutlineInputBorder(
-          borderSide:
-              BorderSide(color: _style?.borderColor ?? Colors.transparent),
-          borderRadius: _style?.borderRadius ?? BorderRadius.zero,
+          borderSide: BorderSide(
+              color: _style?.borderColor ??
+                  eleTheme.borderColorBase ??
+                  Colors.transparent),
+          borderRadius: _style?.borderRadius ??
+              BorderRadius.circular(eleTheme.borderRadiusBase ?? 0.0),
         ),
         hintText: widget.placeholder,
         hintStyle: _placeholderTextStyle,
         focusedBorder: OutlineInputBorder(
-          borderSide:
-              BorderSide(color: _style?.focusBorderColor ?? Colors.transparent),
-          borderRadius: _style?.borderRadius ?? BorderRadius.zero,
+          borderSide: BorderSide(
+              color: _style?.focusBorderColor ??
+                  eleTheme.primaryColor ??
+                  Colors.transparent),
+          borderRadius: _style?.borderRadius ??
+              BorderRadius.circular(eleTheme.borderRadiusBase ?? 0.0),
         ),
         suffixIcon: _buildSuffix(_style),
         prefixIcon: widget.prefix,
         contentPadding: contentPadding,
       ),
+      strutStyle: widget.strutStyle,
+      textDirection: widget.textDirection,
+      showCursor: widget.showCursor,
+      autofocus: widget.autofocus,
+      obscuringCharacter: widget.obscuringCharacter,
+      autocorrect: widget.autocorrect,
+      smartDashesType: widget.smartDashesType,
+      smartQuotesType: widget.smartQuotesType,
+      enableSuggestions: widget.enableSuggestions,
+      minLines: widget.minLines,
+      expands: widget.expands,
+      maxLengthEnforcement: widget.maxLengthEnforcement,
+      onEditingComplete: widget.onEditingComplete,
+      onAppPrivateCommand: widget.onAppPrivateCommand,
+      cursorWidth: widget.cursorWidth,
+      cursorHeight: widget.cursorHeight,
+      cursorRadius: widget.cursorRadius,
+      cursorColor: widget.cursorColor,
+      selectionHeightStyle: widget.selectionHeightStyle,
+      selectionWidthStyle: widget.selectionWidthStyle,
+      keyboardAppearance: widget.keyboardAppearance,
+      scrollPadding: widget.scrollPadding,
+      dragStartBehavior: widget.dragStartBehavior,
+      enableInteractiveSelection: widget.enableInteractiveSelection,
+      selectionControls: widget.selectionControls,
+      onTap: widget.onTap,
+      mouseCursor: widget.mouseCursor,
+      scrollController: widget.scrollController,
+      scrollPhysics: widget.scrollPhysics,
+      autofillHints: widget.autofillHints,
+      clipBehavior: widget.clipBehavior,
+      enableIMEPersonalizedLearning: widget.enableIMEPersonalizedLearning,
+      restorationId: widget.restorationId,
     );
     if (widget.height != null) {
       return SizedBox(
@@ -232,7 +351,7 @@ class _ETextFieldState extends State<ETextField> {
             onPressed: _onClickClearIcon,
             icon: Icon(
               Icons.highlight_off,
-              color: style?.clearColor,
+              color: style?.clearColor ?? EleTheme.of(context).borderColorBase,
             ),
           )
         : null;
@@ -242,7 +361,7 @@ class _ETextFieldState extends State<ETextField> {
             onPressed: _onClickPasswordIcon,
             icon: Icon(
               _showPassword ? Icons.visibility_off : Icons.visibility,
-              color: style?.clearColor,
+              color: style?.clearColor ?? EleTheme.of(context).borderColorBase,
             ),
           )
         : null;

@@ -5,21 +5,20 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'theme/theme.dart';
 import 'theme/theme_data.dart';
-import 'theme/theme_status.dart';
 
 enum ProgressType { line, circle, dashboard, liquid }
 
 class EProgress extends StatelessWidget {
   /// min progress
-  static const int _minProgress = 0;
+  static const double _minProgress = 0;
 
   /// max progress
-  static const int _maxProgress = 100;
+  static const double _maxProgress = 1;
 
   ///
-  /// 百分比 范围0-100
+  /// 百分比 范围0-1
   ///
-  final int progress;
+  final double progress;
 
   ///
   /// 进度条类型,默认line
@@ -35,11 +34,6 @@ class EProgress extends StatelessWidget {
   /// 进度条显示文字内置在进度条内（只在 type=line 时可用）,默认false
   ///
   final bool textInside;
-
-  ///
-  /// 进度条当前状态
-  ///
-  final EleThemeStatus? status;
 
   ///
   /// 是否显示进度条文字内容,true
@@ -59,7 +53,7 @@ class EProgress extends StatelessWidget {
   ///
   /// 指定进度条文字内容
   ///
-  final String? Function(int percentage)? format;
+  final String? Function(double percentage)? format;
 
   ///
   /// 进度条激活颜色,多个代表渐变色
@@ -91,7 +85,6 @@ class EProgress extends StatelessWidget {
     this.textInside = false,
     this.colors,
     this.backgroundColor,
-    this.status,
     this.showText = true,
     this.strokeCap = StrokeCap.round,
     this.direction = Axis.horizontal,
@@ -109,36 +102,32 @@ class EProgress extends StatelessWidget {
     if (colors != null) {
       _colors = colors!;
     } else {
-      _colors.add(status?.color(eleThemeData) ??
-          eleThemeData.primaryColor ??
-          Theme.of(context).primaryColor);
+      _colors.add(eleThemeData.primaryColor ?? Theme.of(context).primaryColor);
     }
 
-    var _backgroundColor =
-        backgroundColor ?? eleThemeData.borderColorLight ?? Colors.transparent;
+    var _backgroundColor = backgroundColor ??
+        eleThemeData.borderColorLighter ??
+        Colors.transparent;
 
-    // progress 在0-100之间，超过范围，取 0 或者100
-    var _progress = min(_maxProgress, max(_minProgress, progress));
+    var _progress = progress.clamp(_minProgress, _maxProgress);
 
     String? _text;
     if (showText) {
-      _text = format?.call(_progress) ?? '$_progress%';
+      _text =
+          format?.call(_progress) ?? '${(_progress * 100).toStringAsFixed(0)}%';
     }
-
-    Color _textOutsideColor =
-        eleThemeData.primaryTextColor ?? Theme.of(context).primaryColor;
 
     var _textStyle = textStyle ??
         ((textInside &&
                 (type == ProgressType.line || type == ProgressType.liquid))
             ? const TextStyle(color: Colors.white)
-            : TextStyle(color: _textOutsideColor));
+            : TextStyle(color: eleThemeData.regularTextColor));
 
     if (type == ProgressType.liquid) {
       var _borderColor =
-          borderColor ?? eleThemeData.borderColorLight ?? Colors.transparent;
+          borderColor ?? eleThemeData.borderColorLighter ?? Colors.transparent;
       return LiquidProgressWidget(
-        progress: _progress / 100.0,
+        progress: _progress,
         colors: _colors,
         direction: direction,
         backgroundColor: _backgroundColor,
@@ -154,7 +143,7 @@ class EProgress extends StatelessWidget {
       switch (type) {
         case ProgressType.line:
           _painter = _LineProgressPainter(
-            progress: _progress / 100.0,
+            progress: _progress,
             colors: _colors,
             backgroundColor: _backgroundColor,
             strokeWidth: strokeWidth,
@@ -167,7 +156,7 @@ class EProgress extends StatelessWidget {
           break;
         case ProgressType.circle:
           _painter = _CircleProgressPainter(
-            progress: _progress / 100.0,
+            progress: _progress,
             colors: _colors,
             backgroundColor: _backgroundColor,
             strokeWidth: strokeWidth,
@@ -178,7 +167,7 @@ class EProgress extends StatelessWidget {
           break;
         case ProgressType.dashboard:
           _painter = _DashboardProgressPainter(
-            progress: _progress / 100.0,
+            progress: _progress,
             colors: _colors,
             backgroundColor: _backgroundColor,
             strokeWidth: strokeWidth,
@@ -593,7 +582,6 @@ class _DashboardProgressPainter extends _ProgressPainter {
   }
 }
 
-
 class LiquidProgressWidget extends StatefulWidget {
   ///
   /// 百分比 范围0-1
@@ -796,8 +784,8 @@ class _LinearBorderPainter extends CustomPainter {
   @override
   bool shouldRepaint(_LinearBorderPainter oldDelegate) =>
       color != oldDelegate.color ||
-          width != oldDelegate.width ||
-          radius != oldDelegate.radius;
+      width != oldDelegate.width ||
+      radius != oldDelegate.radius;
 }
 
 class _LinearClipper extends CustomClipper<Path> {
@@ -867,20 +855,20 @@ class _WaveState extends State<_WaveView> with SingleTickerProviderStateMixin {
       builder: (context, child) => ClipPath(
         child: widget.colors.length == 1
             ? Container(
-          color: widget.colors[0],
-        )
+                color: widget.colors[0],
+              )
             : Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: widget.direction == Axis.horizontal
-                    ? Alignment.centerLeft
-                    : Alignment.bottomCenter,
-                end: widget.direction == Axis.horizontal
-                    ? Alignment.centerRight
-                    : Alignment.topCenter,
-                colors: widget.colors,
-              )),
-        ),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                  begin: widget.direction == Axis.horizontal
+                      ? Alignment.centerLeft
+                      : Alignment.bottomCenter,
+                  end: widget.direction == Axis.horizontal
+                      ? Alignment.centerRight
+                      : Alignment.topCenter,
+                  colors: widget.colors,
+                )),
+              ),
         clipper: _WaveClipper(
           animationValue: _animationController.value,
           progress: widget.progress,
@@ -948,6 +936,6 @@ class _WaveClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(_WaveClipper oldClipper) =>
       animationValue != oldClipper.animationValue ||
-          progress != oldClipper.progress ||
-          direction != oldClipper.direction;
+      progress != oldClipper.progress ||
+      direction != oldClipper.direction;
 }

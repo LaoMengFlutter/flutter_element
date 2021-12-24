@@ -10,8 +10,6 @@ class ERadioStyle with Diagnosticable {
   final Color? checkedBackgroundColor;
   final Color? borderColor;
   final Color? checkedBorderColor;
-  final Color? buttonCheckedBorderColor;
-  final Color? buttonCheckedFontColor;
   final BorderRadius? borderRadius;
   final EdgeInsets? padding;
 
@@ -25,8 +23,6 @@ class ERadioStyle with Diagnosticable {
     this.checkedBackgroundColor,
     this.borderColor,
     this.checkedBorderColor,
-    this.buttonCheckedBorderColor,
-    this.buttonCheckedFontColor,
     this.borderRadius,
     this.padding,
     this.space,
@@ -44,10 +40,6 @@ class ERadioStyle with Diagnosticable {
           other.checkedBackgroundColor ?? checkedBackgroundColor,
       borderColor: other.borderColor ?? borderColor,
       checkedBorderColor: other.checkedBorderColor ?? checkedBorderColor,
-      buttonCheckedBorderColor:
-          other.buttonCheckedBorderColor ?? buttonCheckedBorderColor,
-      buttonCheckedFontColor:
-          other.buttonCheckedFontColor ?? buttonCheckedFontColor,
       borderRadius: other.borderRadius ?? borderRadius,
       padding: other.padding ?? padding,
       space: other.space ?? space,

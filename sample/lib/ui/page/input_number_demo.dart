@@ -1,8 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_element/widgets.dart';
+import 'package:element_ui/widgets.dart';
+import 'package:flutter/services.dart';
 
-class InputNumberDemo extends StatelessWidget {
-  const InputNumberDemo({Key? key}) : super(key: key);
+class InputNumberDemo extends StatefulWidget {
+  InputNumberDemo({Key? key}) : super(key: key);
+
+  @override
+  State<InputNumberDemo> createState() => _InputNumberDemoState();
+}
+
+class _InputNumberDemoState extends State<InputNumberDemo> {
+  double? _value = 20.0;
+  late TextEditingController _controller;
+
+  @override
+  initState() {
+    _controller = TextEditingController()
+      ..value = TextEditingValue(text: _value?.toStringAsFixed(2) ?? '');
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,11 +130,10 @@ class InputNumberDemo extends StatelessWidget {
                 child: const EInputNumber(
                   height: 45,
                   style: EInputNumberStyle(
-                    focusBorderColor: Colors.red,
-                    iconColor: Colors.red,
-                    iconBackgroundColor: Colors.green,
-                    borderRadius: BorderRadius.all(Radius.circular(25))
-                  ),
+                      focusBorderColor: Colors.red,
+                      iconColor: Colors.red,
+                      iconBackgroundColor: Colors.green,
+                      borderRadius: BorderRadius.all(Radius.circular(25))),
                 ),
               ),
               SizedBox(height: 12),
@@ -127,7 +142,18 @@ class InputNumberDemo extends StatelessWidget {
                 width: 150,
                 child: EInputNumber(
                   height: 45,
-                  onChanged: (value){
+                  onChanged: (value) {
+                    print('value:$value');
+                  },
+                ),
+              ),
+              Container(
+                height: 45,
+                width: 150,
+                child: EInputNumber(
+                  height: 45,
+                  value: 30.00,
+                  onChanged: (value) {
                     print('value:$value');
                   },
                 ),

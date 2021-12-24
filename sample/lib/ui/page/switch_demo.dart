@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_element/widgets.dart';
+import 'package:element_ui/widgets.dart';
 
 class SwitchDemo extends StatelessWidget {
   const SwitchDemo({Key? key}) : super(key: key);
