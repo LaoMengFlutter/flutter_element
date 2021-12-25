@@ -16,16 +16,24 @@ class SwitchDemo extends StatelessWidget {
             SizedBox(height: 12),
             ESwitch(),
             SizedBox(height: 12),
-            ESwitch(enable: false,),
+            ESwitch(
+              value: true,
+            ),
             SizedBox(height: 12),
             ESwitch(
               value: true,
+              onChanged: (value) {},
+            ),
+            SizedBox(height: 12),
+            ESwitch(
+              enable: false,
             ),
             SizedBox(height: 12),
             ESwitch(
               style: ESwitchStyle(
                 activeColor: Colors.green,
                 trackColor: Colors.red,
+                thumbColor: Colors.blue,
               ),
             ),
           ],

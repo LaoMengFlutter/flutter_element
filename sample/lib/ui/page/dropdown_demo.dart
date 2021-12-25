@@ -11,50 +11,56 @@ class DropdownDemo extends StatelessWidget {
         (index) => EDropdownMenuItem(
               child: Text('上海:$index'),
               value: '$index',
-              enabled: index != 5,
             )).toList();
     return Scaffold(
       appBar: AppBar(),
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: Column(
-            children: [
-              SizedBox(height: 12, width: double.infinity),
-              EDropdown<String>(
-                hint: Text('请选择'),
-                items: items,
+      body: Padding(
+        padding: const EdgeInsets.all(30.0),
+        child: Column(
+          children: [
+            SizedBox(height: 12, width: double.infinity),
+            EDropdown<String>(
+              items: items,
+            ),
+            SizedBox(height: 12),
+            EDropdown<String>(
+              hint: Text('请选择'),
+              items: items,
+            ),
+            SizedBox(height: 12),
+            EDropdown<String>(
+              value: '1',
+              items: items,
+            ),
+            SizedBox(height: 12),
+            EDropdown<String>(
+              onChanged: (value) {
+                print('$value');
+              },
+              items: items,
+            ),
+            SizedBox(height: 12),
+            EDropdown<String>(
+              value: '1',
+              isExpanded: false,
+              items: items,
+            ),
+            SizedBox(height: 12),
+            EDropdown<String>(
+              items: items,
+              dropdownStyle: EDropdownStyle(
+                dropdownBorderColor: Colors.green,
+                dropdownFocusBorderColor: Colors.red,
+                fontColor: Colors.yellow,
+                selectFontColor: Colors.blue,
               ),
-              SizedBox(height: 12),
-              EDropdown<String>(
-                value: '1',
-                items: items,
-              ),
-              SizedBox(height: 12),
-              EDropdown<String>(
-                value: '1',
-                onChanged: (value) {
-                  print('$value');
-                },
-                items: items,
-              ),
-              SizedBox(height: 12),
-              EDropdown<String>(
-                value: '1',
-                isExpanded: false,
-                items: items,
-              ),
-              SizedBox(height: 12),
-              EDropdown<String>(
-                value: '1',
-                items: items,
-              ),
-              SizedBox(
-                height: 12,
-              ),
-            ],
-          ),
+            ),
+
+            SizedBox(
+              height: 12,
+            ),
+          ],
         ),
       ),
     );

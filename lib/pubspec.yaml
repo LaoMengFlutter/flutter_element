@@ -1,6 +1,6 @@
 name: element_ui
-description: A new Flutter package.
-version: 0.1.0
+description: Element UI, a set of Flutter-based component libraries for developers.
+version: 0.1.1
 homepage: http://laomengit.com
 
 environment:

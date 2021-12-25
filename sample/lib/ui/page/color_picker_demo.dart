@@ -9,15 +9,6 @@ class ColorPickerDemo extends StatefulWidget {
 }
 
 class _ColorPickerDemoState extends State<ColorPickerDemo> {
-  // create some values
-  Color? pickerColor = Color(0xff443a49);
-
-  void _onChange(Color? color) {
-    setState(() {
-      pickerColor = color;
-    });
-  }
-
   @override
   initState() {
     super.initState();
@@ -32,22 +23,14 @@ class _ColorPickerDemoState extends State<ColorPickerDemo> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(height: 12),
               Container(
-                height: 50,
-                width: 50,
-                color: pickerColor,
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              Container(
-                height: 350,
+                height: 300,
                 width: 300,
                 color: Colors.white,
                 child: EColorPicker(
-                  color: null,
                   showAlpha: true,
-                  onChange: _onChange,
+                  showClearButton: true,
                   predefineColors: [
                     Color(0xFFff4500),
                     Color(0xFFff8c00),
@@ -68,30 +51,30 @@ class _ColorPickerDemoState extends State<ColorPickerDemo> {
               EColorPickerButton(
                 height: 45,
                 width: 45,
-                color: Colors.blue.withOpacity(.3),
+                color: Colors.blue,
               ),
               SizedBox(height: 12),
-              Row(
-                children: [
-                  EColorPickerButton(
-                    height: 45,
-                    width: 45,
-                    color: Colors.blue.withOpacity(.3),
-                  ),
-                  Expanded(child: Container()),
-                  EColorPickerButton(
-                    height: 45,
-                    width: 45,
-                    color: Colors.blue.withOpacity(.3),
-                  ),
-                ],
-              ),
-              SizedBox(height: 300),
-              EColorPickerButton(
-                height: 45,
-                width: 45,
-                color: Colors.blue.withOpacity(.3),
-              ),
+              // Row(
+              //   children: [
+              //     EColorPickerButton(
+              //       height: 45,
+              //       width: 45,
+              //       color: Colors.blue.withOpacity(.3),
+              //     ),
+              //     Expanded(child: Container()),
+              //     EColorPickerButton(
+              //       height: 45,
+              //       width: 45,
+              //       color: Colors.blue.withOpacity(.3),
+              //     ),
+              //   ],
+              // ),
+              // SizedBox(height: 600),
+              // EColorPickerButton(
+              //   height: 45,
+              //   width: 45,
+              //   color: Colors.blue.withOpacity(.3),
+              // ),
             ],
           ),
         ),

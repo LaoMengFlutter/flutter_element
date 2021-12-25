@@ -12,10 +12,11 @@ class ButtonDemo extends StatelessWidget {
       appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Wrap(
-          runSpacing: 10,
-          spacing: 10,
+        child: Column(
+          // runSpacing: 10,
+          // spacing: 10,
           children: [
+            SizedBox(width: double.infinity,),
             EButton(
               onPressed: () {},
               child: Text('默认按钮'),
@@ -53,27 +54,7 @@ class ButtonDemo extends StatelessWidget {
               borderStyle: EButtonBorderStyle.none,
               child: Text('文字按钮'),
             ),
-            EButton(
-              onPressed: () {},
-              child: Text('文字大小按钮'),
-            ),
-            EButton(
-              onPressed: () {},
-              child: Text('红色文字按钮'),
-            ),
-            EButton(
-              onPressed: () {},
-              child: Text('背景黑色按钮'),
-            ),
-            EButton(
-              onPressed: () {},
-              borderStyle: EButtonBorderStyle.stroke,
-              child: Text('边框按钮'),
-            ),
-            EButton(
-              onPressed: () {},
-              child: Text('水波纹按钮'),
-            ),
+
             EButton(
               onPressed: () {
                 print('onPressed');

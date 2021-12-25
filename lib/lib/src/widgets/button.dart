@@ -48,7 +48,9 @@ class EButton extends StatelessWidget {
         children: [
           _Indicator(
             radius: 8,
-            color: loadingColor ?? EleTheme.of(context).backgroundColorWhite??Colors.white,
+            color: loadingColor ??
+                EleTheme.of(context).backgroundColorWhite ??
+                Colors.white,
           ),
           const SizedBox(width: 8),
           _child
@@ -106,6 +108,8 @@ class EButton extends StatelessWidget {
             MaterialStateProperty.resolveWith((states) {
               if (borderStyle == EButtonBorderStyle.fill) {
                 return EleTheme.of(context).primaryColor;
+              } else if (borderStyle == EButtonBorderStyle.none) {
+                return Colors.transparent;
               }
               return EleTheme.of(context).backgroundColorWhite;
             }),

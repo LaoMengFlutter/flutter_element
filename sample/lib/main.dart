@@ -19,18 +19,20 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.blue),
       home: EleTheme(
         data: EleThemeData(
+          primaryColor: Colors.blue,
           imageStyle: EImageStyle(
-              errorWidget: Container(
-                color: Colors.grey.withOpacity(.3),
-                alignment: Alignment.center,
-                child: Text(
-                  '加载失败',
-                  style: TextStyle(color: Colors.white),
-                ),
+            errorWidget: Container(
+              color: Colors.grey.withOpacity(.3),
+              alignment: Alignment.center,
+              child: Text(
+                '加载失败',
+                style: TextStyle(color: Colors.white),
               ),
-              placeholderWidget: Container(
-                color: Colors.grey.withOpacity(.3),
-              )),
+            ),
+            placeholderWidget: Container(
+              color: Colors.grey.withOpacity(.3),
+            ),
+          ),
         ),
         child: NavigatorList(),
       ),

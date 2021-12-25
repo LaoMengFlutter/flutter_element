@@ -22,45 +22,36 @@ class _RateDemoState extends State<RateDemo> {
               height: 12,
               width: double.infinity,
             ),
-            // RatingBar.builder(
-            //   initialRating: 3,
-            //   minRating: 1,
-            //   direction: Axis.horizontal,
-            //   allowHalfRating: true,
-            //   itemCount: 5,
-            //   itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-            //   itemBuilder: (context, _) => Icon(
-            //     Icons.star,
-            //     color: Colors.amber,
-            //   ),
-            //   onRatingUpdate: (rating) {
-            //     print(rating);
-            //   },
-            // ),
-            // SizedBox(height: 12),
+            ERate(value: 3.7),
+            SizedBox(height: 12),
             ERate(
-              value: 3.7,
-              style: ERateStyle(activeColor: Colors.amber),
+              value: 5.5,
+              count: 6,
             ),
             SizedBox(height: 12),
             ERate(
               value: 3.7,
               showLabel: true,
-              itemSize: 30,
-              style: ERateStyle(activeColor: Colors.amber),
+            ),
+            SizedBox(height: 12),
+            ERate(
+              value: 3.7,
+              itemSize: 60,
             ),
             SizedBox(height: 12),
             ERate(
               value: 5,
               iconType: RateIconType.sentiment,
-              style: ERateStyle(activeColor: Colors.amber),
             ),
             SizedBox(height: 12),
             ERate(
               value: 5,
-              iconType: RateIconType.sentiment,
+              iconType: RateIconType.sameSentiment,
+            ),
+            SizedBox(height: 12),
+            ERate(
+              value: 5,
               showLabel: true,
-              style: ERateStyle(activeColor: Colors.amber),
               labelBuilder: (double value) {
                 String s = '';
                 if (value <= 1) {
@@ -80,15 +71,45 @@ class _RateDemoState extends State<RateDemo> {
             SizedBox(height: 12),
             ERate(
               value: 3.5,
-              iconType: RateIconType.sameSentiment,
-              style: ERateStyle(activeColor: Colors.amber),
+              space: 12,
             ),
             SizedBox(height: 12),
             ERate(
               value: 3.5,
-              iconType: RateIconType.sameSentiment,
               enable: false,
-              style: ERateStyle(activeColor: Colors.amber),
+            ),
+            SizedBox(height: 12),
+            ERate(
+              value: 3.5,
+              onChanged: (value) {
+                print('$value');
+              },
+            ),
+            SizedBox(height: 12),
+            ERate(
+              value: 3.5,
+              child: SizedBox(
+                width: 40,
+                height: 40,
+                child: ColoredBox(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            SizedBox(height: 12),
+            ERate(
+              value: 3.5,
+              itemBuilder: (context, index) {
+                return Text('$index');
+              },
+            ),
+            SizedBox(height: 12),
+            ERate(
+              value: 3.5,
+              style: ERateStyle(
+                activeColor: Colors.red,
+                inactiveColor: Colors.black,
+              ),
             ),
           ],
         ),

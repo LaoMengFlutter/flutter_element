@@ -7,7 +7,7 @@ import 'theme/page_view_style.dart';
 import 'theme/theme.dart';
 
 const _kAutoPlayDuration = Duration(milliseconds: 3000);
-const _kPageDuration = Duration(milliseconds: 300);
+const _kNextPageDuration = Duration(milliseconds: 300);
 const _kDotIndicatorSize = Size(8, 8);
 const _kHorizontalLineIndicatorSize = Size(24, 2);
 const _kVerticalLineIndicatorSize = Size(2, 24);
@@ -22,7 +22,7 @@ class EPageView extends StatefulWidget {
     this.scrollDirection = Axis.horizontal,
     this.autoPlay = false,
     this.autoPlayDuration = _kAutoPlayDuration,
-    this.autoPlayPageDuration = _kPageDuration,
+    this.nextPageDuration = _kNextPageDuration,
     this.loop = false,
     this.showIndicator = false,
     this.indicatorItemBuilder,
@@ -61,7 +61,7 @@ class EPageView extends StatefulWidget {
   final Duration autoPlayDuration;
 
   //自动切换，切换Page时长
-  final Duration autoPlayPageDuration;
+  final Duration nextPageDuration;
 
   //是否无限循环
   final bool loop;
@@ -137,7 +137,7 @@ class _EPageViewState extends State<EPageView> {
         return;
       }
       _controller.nextPage(
-          duration: widget.autoPlayPageDuration, curve: Curves.linear);
+          duration: widget.nextPageDuration, curve: Curves.linear);
     });
   }
 
@@ -221,7 +221,7 @@ class _EPageViewState extends State<EPageView> {
               top: 12,
               right: 0,
               left: 0,
-              child: _buildNextWidget(Icons.expand_less),
+              child: _buildPreviousWidget(Icons.expand_less),
             ),
         ],
       );
@@ -242,28 +242,34 @@ class _EPageViewState extends State<EPageView> {
   Widget _buildNextWidget(IconData iconData) {
     return GestureDetector(
       onTap: _nextPage,
-      child: widget.nextWidget ??
-          Container(
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: EleTheme.of(context).borderColorBase),
-            child: Icon(iconData, color: EleTheme.of(context).backgroundColorWhite),
-          ),
+      child: Center(
+        child: widget.nextWidget ??
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: EleTheme.of(context).borderColorBase),
+              child: Icon(iconData,
+                  color: EleTheme.of(context).backgroundColorWhite),
+            ),
+      ),
     );
   }
 
   Widget _buildPreviousWidget(IconData iconData) {
     return GestureDetector(
       onTap: _previousPage,
-      child: widget.previousWidget ??
-          Container(
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: EleTheme.of(context).borderColorBase),
-            child: Icon(iconData, color: EleTheme.of(context).backgroundColorWhite),
-          ),
+      child: Center(
+        child: widget.previousWidget ??
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: EleTheme.of(context).borderColorBase),
+              child: Icon(iconData,
+                  color: EleTheme.of(context).backgroundColorWhite),
+            ),
+      ),
     );
   }
 
@@ -427,8 +433,8 @@ enum PageViewIndicatorType {
   line,
 }
 enum PageViewIndicatorPosition {
-  //圆点
+  //外部
   outside,
-  //直线
+  //内部
   inside,
 }

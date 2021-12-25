@@ -38,7 +38,16 @@ class SliderDemo extends StatelessWidget {
             ESlider(
               range: true,
               rangeValues: RangeValues(.1, .5),
-              style: ESliderStyle(thumbColor: Color(0xFFFF0000)),
+              divisions: 10,
+            ),
+            SizedBox(height: 12),
+            ESlider(
+              value: .3,
+              style: ESliderStyle(
+                activeColor: Colors.blue,
+                inactiveColor: Colors.black,
+                thumbColor: Colors.green,
+              ),
             ),
           ],
         ),

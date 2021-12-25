@@ -308,8 +308,10 @@ class EAlertDialog extends StatelessWidget {
         ),
       );
       if (contentCenter) {
-        contentWidget = Center(
-          child: contentWidget,
+        contentWidget = Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [contentWidget],
         );
       }
     }
