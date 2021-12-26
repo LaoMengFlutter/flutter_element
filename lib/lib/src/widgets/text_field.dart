@@ -69,7 +69,6 @@ class ETextField extends StatefulWidget {
   final ScrollPhysics? scrollPhysics;
   final ScrollController? scrollController;
   final Iterable<String>? autofillHints;
-  final Clip clipBehavior;
   final String? restorationId;
   final bool enableIMEPersonalizedLearning;
   final EdgeInsetsGeometry? contentPadding;
@@ -115,7 +114,6 @@ class ETextField extends StatefulWidget {
     this.mouseCursor,
     this.onTap,
     this.autofillHints,
-    this.clipBehavior = Clip.hardEdge,
     this.cursorColor,
     this.cursorHeight,
     this.cursorRadius,
@@ -332,7 +330,6 @@ class _ETextFieldState extends State<ETextField> {
       scrollController: widget.scrollController,
       scrollPhysics: widget.scrollPhysics,
       autofillHints: widget.autofillHints,
-      clipBehavior: widget.clipBehavior,
       enableIMEPersonalizedLearning: widget.enableIMEPersonalizedLearning,
       restorationId: widget.restorationId,
     );
