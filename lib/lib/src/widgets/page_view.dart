@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-
 import 'theme/page_view_style.dart';
 import 'theme/theme.dart';
 

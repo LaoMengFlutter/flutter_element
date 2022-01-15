@@ -55,6 +55,7 @@ class PageViewDemo extends StatelessWidget {
               child: EPageView(
                 itemBuilder: itemBuilder,
                 itemCount: 5,
+                autoPlay: true,
                 loop: true,
               ),
             ),
@@ -111,8 +112,7 @@ class PageViewDemo extends StatelessWidget {
                 indicatorType: PageViewIndicatorType.line,
               ),
             ),
-            SizedBox(height: 12),
-            Container(
+            SizedBox(
               height: 200,
               color: Colors.grey.withOpacity(.4),
               child: EPageView(
@@ -125,6 +125,7 @@ class PageViewDemo extends StatelessWidget {
             SizedBox(height: 12),
             SizedBox(
               height: 200,
+              color: Colors.grey.withOpacity(.4),
               child: EPageView(
                 itemBuilder: itemBuilder,
                 itemCount: 5,
@@ -152,11 +153,10 @@ class PageViewDemo extends StatelessWidget {
                 itemCount: 5,
                 showIndicator: true,
                 scrollDirection: Axis.vertical,
-                indicatorPosition: PageViewIndicatorPosition.outside,
               ),
             ),
             SizedBox(height: 12),
-            SizedBox(
+            Container(
               height: 200,
               child: EPageView(
                 itemBuilder: itemBuilder,

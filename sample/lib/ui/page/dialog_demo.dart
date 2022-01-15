@@ -49,6 +49,33 @@ class DialogDemo extends StatelessWidget {
                     builder: (context) {
                       return EAlertDialog(
                         title: Text('提示'),
+                        content: Text('确认删除吗'),
+                        actions: [
+                          EButton(
+                            child: Text('取消'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          EButton(
+                            child: Text('确认'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    });
+              },
+              child: Text('基础用法'),
+            ),
+            EButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return EAlertDialog(
+                        title: Text('提示'),
                         titleCenter: true,
                         content: Text('确认删除吗'),
                         contentCenter:true ,
